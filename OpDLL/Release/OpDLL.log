@@ -1,0 +1,11 @@
+﻿  pch.cpp
+  dllmain.cpp
+  op.cpp
+    正在创建库 F:\VS2017 code\WinProcedure\Release\OpDLL.lib 和对象 F:\VS2017 code\WinProcedure\Release\OpDLL.exp
+OpDLL.exp : warning LNK4070: .EXP 中的 /OUT:op.dll 指令与输出文件名“F:\VS2017 code\WinProcedure\Release\OpDLL.dll”不同；忽略指令
+  正在生成代码
+  Previous IPDB not found, fall back to full compilation.
+  All 3 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+OpDLL.exp : warning LNK4070: .EXP 中的 /OUT:op.dll 指令与输出文件名“F:\VS2017 code\WinProcedure\Release\OpDLL.dll”不同；忽略指令
+  OpDLL.vcxproj -> F:\VS2017 code\WinProcedure\Release\OpDLL.dll

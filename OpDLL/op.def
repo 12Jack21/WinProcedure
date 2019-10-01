@@ -1,0 +1,6 @@
+LIBRARY "op"
+
+EXPORTS
+
+Add @ 1
+Multiply @ 2
