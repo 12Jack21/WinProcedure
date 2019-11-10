@@ -1,0 +1,27 @@
+﻿<Page x:Class="WinProcedure.Page1"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WinProcedure"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Page1">
+
+    <Grid>
+        <ListBox x:Name="view" HorizontalAlignment="Left" Height="430" Margin="156,10,0,0" VerticalAlignment="Top" Width="503"/>
+        <Button x:Name="current" Content="当前线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="92" Height="Auto" Margin="27,100,681,0" Click="current_Click" />
+        <Button x:Name="create" Content="创建线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="92" Height="Auto" Margin="27,124,681,0" Click="autoReset_Click" />
+        <Button x:Name="front" Content="前台线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="92" Height="Auto" Margin="27,148,681,0" />
+        <Button x:Name="back" Content="后台线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="92" Height="Auto" Margin="27,172,681,0" />
+        <Button x:Name="join" Content="Join线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="92" Height="Auto" Margin="27,196,681,0" />
+        <Button x:Name="sync" Content="线程同步" HorizontalAlignment="Center" VerticalAlignment="Top" Width="92" Height="Auto" Margin="27,220,681,0" />
+        <Button x:Name="async" Content="线程异步" HorizontalAlignment="Center" VerticalAlignment="Top" Width="92" Height="Auto" Margin="27,244,681,0" />
+        <Button x:Name="asyncCall" Content="线程异步回调" HorizontalAlignment="Center" VerticalAlignment="Top" Width="92" Height="Auto" Margin="27,268,681,0" />
+        <Button x:Name="autoReset" Content="AutoResetEvent" HorizontalAlignment="Center" VerticalAlignment="Top" Width="92" Height="Auto" Margin="27,292,681,0" />
+        <Button x:Name="manualReset"  Content="ManualResetEvent" HorizontalAlignment="Center" VerticalAlignment="Top" Width="92" Height="Auto" Margin="27,316,681,0" />
+        <Button x:Name="produce"  Content="生产者消费者" HorizontalAlignment="Center" VerticalAlignment="Top" Width="92" Height="Auto" Margin="27,340,681,0" />
+        <Label Content="线程" HorizontalAlignment="Left" Margin="27,55,0,0" VerticalAlignment="Top" Width="92" FontSize="18px"/>
+        <CheckBox x:Name="Check" Content="异步" FontSize="18px" HorizontalAlignment="Left" Margin="698,215,0,0" VerticalAlignment="Top"/>
+    </Grid>
+</Page>
