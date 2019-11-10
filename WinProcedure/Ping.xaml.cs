@@ -16,13 +16,28 @@ using System.Windows.Shapes;
 namespace WinProcedure
 {
     /// <summary>
-    /// Page1.xaml 的交互逻辑
+    /// Ping.xaml 的交互逻辑
     /// </summary>
-    public partial class Page1 : Page
+    public partial class Ping : Page
     {
-        public Page1()
+        public Ping()
         {
             InitializeComponent();
+        }
+
+        private void AsyncPingBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void GetMacBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SyncPingBtn_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

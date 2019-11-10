@@ -1,0 +1,22 @@
+﻿<Page x:Class="WinProcedure.Ping"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WinProcedure"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Ping">
+
+    <Grid>
+        <Button x:Name="syncPingBtn" Content="同步调用ping" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Width="100" Height="36" Click="SyncPingBtn_Click"/>
+        <Button x:Name="asyncPingBtn" Content="异步调用ping" HorizontalAlignment="Left" Margin="10,141,0,0" VerticalAlignment="Top" Width="100" Height="36" Click="AsyncPingBtn_Click"/>
+        <TextBox x:Name="siteText" HorizontalAlignment="Left" Margin="597,155,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="27" Width="176"/>
+        <Button x:Name="getMacBtn" Content="异步调用getmac" HorizontalAlignment="Left" Margin="10,204,0,0" VerticalAlignment="Top" Width="100" Height="36" Click="GetMacBtn_Click"/>
+        <Button x:Name="threadBtn" Content="线程" HorizontalAlignment="Left" Margin="10,266,0,0" VerticalAlignment="Top" Width="100" Height="36"/>
+        <Button x:Name="ipcBtn" Content="线程间通信" HorizontalAlignment="Left" Margin="10,329,0,0" VerticalAlignment="Top" Width="100" Height="36"/>
+        <Label x:Name="siteTipLable" Content="目标网址：" HorizontalAlignment="Left" Margin="597,124,0,0" VerticalAlignment="Top" Width="124"/>
+        <TextBox x:Name="outputText" HorizontalAlignment="Left" Height="378" Margin="128,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="464"/>
+
+    </Grid>
+</Page>

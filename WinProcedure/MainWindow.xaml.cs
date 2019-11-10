@@ -55,7 +55,7 @@ namespace WinProcedure
                         ReadOnlyCollection<string> pinyins = chChar.Pinyins;
                         for(int i = 0;i < pinyins.Count;i++)
                         {
-                            if(pinyins[i] != null)
+                            if(pinyins[i] != null && pinyins[i] != "") 
                                 ouputList.Items.Add(pinyins[i]);
                         }
                     }
@@ -109,5 +109,6 @@ namespace WinProcedure
                 voice.Speak(text, spFlags);
             }
         }
+
     }
 }

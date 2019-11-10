@@ -21,6 +21,8 @@
         <Label x:Name="modeTip" Content="当前模式：" HorizontalAlignment="Left" Margin="301,40,0,0" VerticalAlignment="Top" Width="57"/>
         <Label x:Name="modeLabel" Content="非托管模式" HorizontalAlignment="Left" Margin="363,40,0,0" VerticalAlignment="Top" Width="99"/>
         <Button x:Name="modeBtn" Content="切换模式" HorizontalAlignment="Left" Margin="491,40,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="ModeBtn_Click"/>
+        <ListBox x:Name="funcListBox" HorizontalAlignment="Left" Height="226" Margin="378,200,0,0" VerticalAlignment="Top" Width="412"/>
+        <Button x:Name="reflection" Content="通过反射机制得到dll中函数" HorizontalAlignment="Left" Margin="175,320,0,0" VerticalAlignment="Top" Width="177" Height="27" Click="Reflection_Click"/>
 
 
 

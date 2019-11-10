@@ -99,6 +99,11 @@ namespace WinProcedure
 
         private void MultiBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (modeLabel.Content.ToString() != "非托管模式")
+            {
+                MessageBox.Show("请先切换到非托管模式!");
+                return;
+            }
             String src1 = this.src1.Text.Trim();
             String src2 = this.src2.Text.Trim();
 
@@ -127,6 +132,11 @@ namespace WinProcedure
 
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (modeLabel.Content.ToString() != "非托管模式")
+            {
+                MessageBox.Show("请先切换到非托管模式!");
+                return;
+            }
             String src1 = this.src1.Text.Trim();
             String src2 = this.src2.Text.Trim();
 
@@ -154,6 +164,11 @@ namespace WinProcedure
 
         private void FactorBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (modeLabel.Content.ToString() != "托管模式")
+            {
+                MessageBox.Show("请先切换到托管模式!");
+                return;
+            }
             String src3 = this.src3.Text.Trim();
             if(src3 == null || src3 == "")
             {
@@ -177,6 +192,11 @@ namespace WinProcedure
 
         private void FiboBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (modeLabel.Content.ToString() != "托管模式")
+            {
+                MessageBox.Show("请先切换到托管模式!");
+                return;
+            }
             String src3 = this.src3.Text.Trim();
             if (src3 == null || src3 == "")
             {
@@ -204,6 +224,45 @@ namespace WinProcedure
                 modeLabel.Content = "非托管模式";
             else
                 modeLabel.Content = "托管模式";
+        }
+
+        private void Reflection_Click(object sender, RoutedEventArgs e)
+        {
+            if(modeLabel.Content.ToString() != "托管模式")
+            {
+                MessageBox.Show("请先切换到托管模式!");
+                return;
+            }
+            //托管模式导入
+            Assembly a = Assembly.LoadFrom("../../../related_dll/OperationDLL.dll");
+            foreach (Type t in a.GetTypes())
+            {
+                Console.WriteLine("Type's Name :" + t.Name);
+                if (t.IsClass && !t.IsAbstract)
+                {
+                    //找到改类名称
+                    if (t.Name == "Calculation")
+                    {
+                        //所有方法信息
+                        MethodInfo[] methodInfos = t.GetMethods();
+                        String funcInfo = null;
+                        foreach (MethodInfo m in methodInfos)
+                        {
+                            Console.WriteLine(m.Name + "    ");
+
+                            funcInfo = m.ReturnType.Name.ToString() + "  " + m.Name.ToString() + "(";
+                            for(int i = 0; i < m.GetParameters().Length;i++){
+                                funcInfo += m.GetParameters()[i].ParameterType.ToString() + " " + m.GetParameters()[i].Name;
+                                if (i != m.GetParameters().Length - 1)
+                                    funcInfo += ",";
+                            }
+                            funcInfo += ")";
+                            funcListBox.Items.Add(funcInfo.ToString());
+                            funcInfo = null;
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -4,3 +4,5 @@ bin
 obj
 COM_source
 packages
+Debug
+x64

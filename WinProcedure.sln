@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperationDLL", "OperationDL
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpDLL", "OpDLL\OpDLL.vcxproj", "{4452DC32-B573-4525-95E3-AED355A62E25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomedCOM", "CustomedCOM\CustomedCOM.csproj", "{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,18 @@ Global
 		{4452DC32-B573-4525-95E3-AED355A62E25}.Release|x64.Build.0 = Release|x64
 		{4452DC32-B573-4525-95E3-AED355A62E25}.Release|x86.ActiveCfg = Release|Win32
 		{4452DC32-B573-4525-95E3-AED355A62E25}.Release|x86.Build.0 = Release|Win32
+		{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}.Debug|x64.Build.0 = Debug|Any CPU
+		{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}.Debug|x86.Build.0 = Debug|Any CPU
+		{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}.Release|x64.ActiveCfg = Release|Any CPU
+		{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}.Release|x64.Build.0 = Release|Any CPU
+		{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}.Release|x86.ActiveCfg = Release|Any CPU
+		{8FB2AA50-9107-4EBC-878B-B2DDE61E50FE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
