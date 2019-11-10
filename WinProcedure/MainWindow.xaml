@@ -31,9 +31,9 @@
                 <local:COMop></local:COMop>
             </TabItem>
 
-            <!--<TabItem x:Name="ProcessTab" Header="进程相关">
-                <local:pingProc></local:pingProc>
-            </TabItem>-->
+            <TabItem x:Name="ProcessTab" Header="进程相关">
+                <Frame Source="Ping.xaml"  Background="White"/>
+            </TabItem>
 
             <TabItem x:Name="FileTab" Header="File相关">
                 <Frame Source="FileOp.xaml"  Background="White"/>
