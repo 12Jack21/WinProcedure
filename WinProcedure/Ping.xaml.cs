@@ -287,7 +287,7 @@ namespace WinProcedure
         private void BeginThread(String text)
         {
             int i = 100000;
-            while(i > 0)
+            while (i > 0)
             {
                 i--;
             }
@@ -305,7 +305,7 @@ namespace WinProcedure
             for (int i = 0; i < 5; i++)
             {
 
-                
+
             }
             return null;
         }
@@ -348,7 +348,7 @@ namespace WinProcedure
         {
             Thread t = null;
             AutoResetEvent _event = new AutoResetEvent(false);
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 t = new Thread(() =>
                 {
@@ -403,5 +403,175 @@ namespace WinProcedure
             _event.Set();
 
         }
+
+
+        // 缓冲区大小
+        const int MAX_BUFF_SIZE = 2;
+        int BUFF_SIZE = MAX_BUFF_SIZE;
+        int inIdx = 0;
+        int outIdx = 0;
+        // 总生产数量
+        const int TOTAL_PRODUCT = 10;
+        // 信号量
+        Semaphore empty;
+        Semaphore full;
+        // 访问生产总量的互斥锁
+        Mutex totalCntMutex = new Mutex();
+        // 访问放入取出的互斥锁
+        Mutex inSlotMutex = new Mutex();
+        Mutex outSlotMutex = new Mutex();
+        // 已经预定生产的数量
+        int producingCnt = 0;
+        int producedCnt = 0;
+        int consumedCnt = 0;
+
+        #region 信号量同步
+
+        // 初始化生产参数
+        private void InitProductParams()
+        {
+            producingCnt = 0;
+            producedCnt = 0;
+            consumedCnt = 0;
+            inIdx = 0;
+            outIdx = 0;
+        }
+
+        // 开始模拟生产者消费者同步
+        private void Produce_Click(object sender, RoutedEventArgs e)
+        {
+            InitProductParams();
+            //try
+            //{
+            //    CreateBufferGrid();
+            //}
+            //catch (Exception)
+            //{
+            //    MessageBox.Show("缓冲区个数应小于12且为正整数！");
+            //    return;
+            //}
+            int producerCnt, consumerCnt;
+
+            outputText.AppendText(string.Format("缓冲区大小为{0}, 生产目标个数为{1}\n", BUFF_SIZE, TOTAL_PRODUCT));
+            producerCnt = 3; //生产者个数
+            consumerCnt = 2; //消费者个数
+            empty = new Semaphore(BUFF_SIZE, BUFF_SIZE);
+            full = new Semaphore(0, BUFF_SIZE);
+
+            for (int i = 0; i < producerCnt; i++)
+            {
+                Thread thread = new Thread(new ParameterizedThreadStart(Produce))
+                {
+                    Name = "生产者_" + i
+                };
+                thread.Start(thread.Name);
+            }
+            for (int i = 0; i < consumerCnt; i++)
+            {
+                Thread thread = new Thread(new ParameterizedThreadStart(Consume))
+                {
+                    Name = "消费者_" + i
+                };
+                thread.Start(thread.Name);
+            }
+
+        }
+
+        // 生产者生产
+        private void Produce(object obj)
+        {
+            while (true)
+            {
+                totalCntMutex.WaitOne();
+                if (producingCnt >= TOTAL_PRODUCT)
+                {
+                    AppendCommonSemResult(string.Format("---达到预定生产目标{0}, {1}结束---\n", TOTAL_PRODUCT, obj.ToString()));
+                    totalCntMutex.ReleaseMutex();
+                    return;
+                }
+                // 未生产完，继续
+                producingCnt++;
+                totalCntMutex.ReleaseMutex();
+                empty.WaitOne();
+                // 放入缓冲区时才获取锁
+                inSlotMutex.WaitOne();
+                AppendProSemResult(string.Format("---{0}生产完成---\n", obj.ToString()));
+                inSlotMutex.ReleaseMutex();
+
+                // 模拟生产延时
+                Thread.Sleep(1000);
+
+                // 通知生产好了
+                full.Release();
+            }
+        }
+        // 消费者消费
+        private void Consume(object obj)
+        {
+            while (true)
+            {
+                totalCntMutex.WaitOne();
+                if (producedCnt >= TOTAL_PRODUCT)
+                {
+                    AppendCommonSemResult(string.Format("---达到预定生产目标{0}, {1}结束---\n", TOTAL_PRODUCT, obj.ToString()));
+                    totalCntMutex.ReleaseMutex();
+                    return;
+                }
+                totalCntMutex.ReleaseMutex();
+                full.WaitOne();
+                outSlotMutex.WaitOne();
+                AppendConSemResult(string.Format("---{0}开始消费---\n", obj.ToString()));
+                // 这里先取再耗时消费
+                outSlotMutex.ReleaseMutex();
+
+                // 模拟消费延时
+                Thread.Sleep(2000);
+                AppendCommonSemResult(string.Format("---{0}消费完成---\n", obj.ToString()));
+                // 通知有空位
+                empty.Release();
+            }
+
+        }
+
+        // 异步更新生产者结果
+        private void AppendProSemResult(string data)
+        {
+            outputText.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                producedCnt++;
+                inIdx++;
+                outputText.AppendText(data + "\n");
+                outputText.ScrollToEnd();
+                outputText.AppendText("已生产了" + producedCnt + "个,消费了" + consumedCnt + "个\n");
+            }));
+        }
+
+
+        // 异步更新消费者结果
+        private void AppendConSemResult(string data)
+        {
+            outputText.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                outIdx++;
+                consumedCnt++;
+                outputText.AppendText(data + "\n");
+                outputText.ScrollToEnd();
+                outputText.AppendText("已生产了" + producedCnt + "个,消费了" + consumedCnt + "个\n");
+            }));
+        }
+
+        // 异步更新通用结果
+        private void AppendCommonSemResult(string data)
+        {
+            outputText.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                outputText.AppendText(data + "\n");
+                outputText.ScrollToEnd();
+                //Lbl_Produced_Cnt.Content = "" + producedCnt;
+            }));
+        }
+        #endregion
+
+
     }
 }

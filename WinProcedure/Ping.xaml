@@ -9,12 +9,10 @@
       Title="Ping">
 
     <Grid>
-        <Button x:Name="syncPingBtn" Content="同步调用ping" HorizontalAlignment="Left" Margin="655,104,0,0" VerticalAlignment="Top" Width="100" Height="36" Click="SyncPingBtn_Click"/>
-        <Button x:Name="asyncPingBtn" Content="异步调用ping" HorizontalAlignment="Left" Margin="655,170,0,0" VerticalAlignment="Top" Width="100" Height="36" Click="AsyncPingBtn_Click"/>
+        <Button x:Name="syncPingBtn" Content="同步调用ping" HorizontalAlignment="Left" Margin="655,146,0,0" VerticalAlignment="Top" Width="100" Height="36" Click="SyncPingBtn_Click"/>
+        <Button x:Name="asyncPingBtn" Content="异步调用ping" HorizontalAlignment="Left" Margin="655,212,0,0" VerticalAlignment="Top" Width="100" Height="36" Click="AsyncPingBtn_Click"/>
         <TextBox x:Name="siteText" HorizontalAlignment="Left" Margin="631,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="27" Width="142"/>
-        <Button x:Name="getMacBtn" Content="异步调用getmac" HorizontalAlignment="Left" Margin="655,233,0,0" VerticalAlignment="Top" Width="100" Height="36" Click="GetMacBtn_Click"/>
-        <Button x:Name="threadBtn" Content="线程" HorizontalAlignment="Left" Margin="655,295,0,0" VerticalAlignment="Top" Width="100" Height="36"/>
-        <Button x:Name="ipcBtn" Content="线程间通信" HorizontalAlignment="Left" Margin="655,358,0,0" VerticalAlignment="Top" Width="100" Height="36"/>
+        <Button x:Name="getMacBtn" Content="异步调用getmac" HorizontalAlignment="Left" Margin="655,275,0,0" VerticalAlignment="Top" Width="100" Height="36" Click="GetMacBtn_Click"/>
         <Label x:Name="siteTipLable" Content="目标网址：" HorizontalAlignment="Left" Margin="631,32,0,0" VerticalAlignment="Top" Width="124"/>
         <TextBox x:Name="outputText" HorizontalAlignment="Left" Height="406" Margin="150,10,0,0"  VerticalAlignment="Top" Width="466"/>
         <Button x:Name="current" Content="当前线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,100,681,0" Click="current_Click" />
@@ -27,7 +25,7 @@
         <Button x:Name="asyncCall" Content="线程异步回调" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,268,681,0" Click="AsyncCall_Click" />
         <Button x:Name="autoReset" Content="AutoResetEvent" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,292,681,0" Click="autoReset_Click" />
         <Button x:Name="manualReset"  Content="ManualResetEvent" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,316,681,0" Click="manualReset_Click" />
-        <Button x:Name="produce"  Content="生产者消费者" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,340,681,0" />
+        <Button x:Name="produce"  Content="生产者消费者" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,340,681,0" Click="Produce_Click" />
         <Label Content="线程" HorizontalAlignment="Left" Margin="27,55,0,0" VerticalAlignment="Top" Width="102" FontSize="18px"/>
     </Grid>
 </Page>
