@@ -1,0 +1,31 @@
+﻿<Page x:Class="WinProcedure.FileOp"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WinProcedure"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="FileOp">
+
+    <Grid>
+        <Button x:Name="searchBtn" Content="查找所有文件" HorizontalAlignment="Left" Margin="639,92,0,0" VerticalAlignment="Top" Width="99" Height="26" Click="SearchBtn_Click"/>
+        <ListBox x:Name="srcList" HorizontalAlignment="Left" Height="161" Margin="117,33,0,0" VerticalAlignment="Top" Width="503" SelectionMode="Multiple"/>
+        <TextBox x:Name="dirpatText" HorizontalAlignment="Left" Height="23" Margin="195,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="273"/>
+        <Button x:Name="seldirBtn" Content="选择目录" HorizontalAlignment="Left" Margin="639,45,0,0" VerticalAlignment="Top" Width="99" Height="25" Click="SeldirBtn_Click"/>
+        <ListBox x:Name="tarList" HorizontalAlignment="Left" Height="147" Margin="117,235,0,0" VerticalAlignment="Top" Width="503" SelectionMode="Multiple"/>
+        <Button x:Name="upBtn" Content="上移" HorizontalAlignment="Left" Margin="639,235,0,0" VerticalAlignment="Top" Width="85" Height="26" Click="UpBtn_Click"/>
+        <Button x:Name="downBtn" Content="下移" HorizontalAlignment="Left" Margin="639,266,0,0" VerticalAlignment="Top" Width="85" Height="26" Click="DownBtn_Click"/>
+        <Button x:Name="selCurBtn" Content="打开选中文件" HorizontalAlignment="Left" Margin="639,297,0,0" VerticalAlignment="Top" Width="85" Height="26" Click="SelCurBtn_Click"/>
+        <Button x:Name="mergeBtn" Content="合并文件" HorizontalAlignment="Left" Margin="639,356,0,0" VerticalAlignment="Top" Width="85" Height="26" Click="MergeBtn_Click"/>
+        <Button x:Name="addBtn" Content="添加到目标集中" HorizontalAlignment="Left" Margin="117,209,0,0" VerticalAlignment="Top" Width="95" Height="26" Click="AddBtn_Click"/>
+        <Button x:Name="removeBtn" Content="从目标集中移出" HorizontalAlignment="Left" Margin="217,209,0,0" VerticalAlignment="Top" Width="94" Height="26" Click="RemoveBtn_Click"/>
+        <Button x:Name="tarFilenameBtn" Content="目标文件名" HorizontalAlignment="Left" Margin="526,209,0,0" VerticalAlignment="Top" Width="94" Height="26" Click="TarFilenameBtn_Click"/>
+        <Label x:Name="filenameLabel" Content="文件名字符" HorizontalAlignment="Left" Margin="117,10,0,0" VerticalAlignment="Top" Width="73"/>
+        <CheckBox x:Name="chLineChk" Content="文件合并时添加换行" HorizontalAlignment="Left" Margin="117,387,0,0" VerticalAlignment="Top" Width="150"/>
+        <CheckBox x:Name="addNameChk" Content="文件合并时添加文件名" HorizontalAlignment="Left" Margin="288,388,0,0" VerticalAlignment="Top" Width="150"/>
+        <CheckBox x:Name="openFileChk" Content="打开合并后的文件" HorizontalAlignment="Left" Margin="461,388,0,0" VerticalAlignment="Top" Width="150"/>
+        <Label x:Name="destNameLabel" Content="" HorizontalAlignment="Left" Margin="381,209,0,0" VerticalAlignment="Top" Width="140"/>
+
+    </Grid>
+</Page>

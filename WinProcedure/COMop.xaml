@@ -6,8 +6,27 @@
              xmlns:local="clr-namespace:WinProcedure"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Button x:Name="wordBtn" Content="调用Word" HorizontalAlignment="Left" Margin="490,141,0,0" VerticalAlignment="Top" Width="105" Height="41" Click="WordBtn_Click"/>
+    <Grid Background="AliceBlue">
+        <Button x:Name="wordBtn" Content="调用Word" HorizontalAlignment="Left" Margin="183,262,0,0" VerticalAlignment="Top" Width="137" Height="43" Click="WordBtn_Click" FontSize="16"/>
+        <CheckBox x:Name="wordCheckBox" Content="是否打开 Word文件" HorizontalAlignment="Left" Margin="371,276,0,0" VerticalAlignment="Top" Height="24" Width="148" FontSize="14"/>
+        <Button x:Name="excelBtn" Content="调用Excel" HorizontalAlignment="Left" Margin="183,344,0,0" VerticalAlignment="Top" Width="137" Height="43" Click="ExcelBtn_Click" FontSize="16"/>
+        <CheckBox x:Name="excelCheckBox" Content="是否打开 Excel文件" HorizontalAlignment="Left" Margin="371,358,0,0" VerticalAlignment="Top" Height="24" Width="148" FontSize="14"/>
+        <TextBox x:Name="add1" HorizontalAlignment="Left" Height="23" Margin="183,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="114"/>
+        <TextBox x:Name="add2" HorizontalAlignment="Left" Height="23" Margin="356,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="114"/>
+        <TextBox x:Name="mul1" HorizontalAlignment="Left" Height="23" Margin="183,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="114"/>
+        <TextBox x:Name="mul2" HorizontalAlignment="Left" Height="23" Margin="356,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="114"/>
+        <Label Content="+" HorizontalAlignment="Left" Margin="315,68,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <Label Content="*" HorizontalAlignment="Left" Margin="315,124,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.365,1.984" FontSize="16"/>
+        <Label Content="=" HorizontalAlignment="Left" Margin="497,60,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <Label Content="=" HorizontalAlignment="Left" Margin="497,117,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <TextBox x:Name="addResultBox" HorizontalAlignment="Left" Height="23" Margin="548,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="mulResultBox" HorizontalAlignment="Left" Height="23" Margin="548,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBlock HorizontalAlignment="Left" Margin="47,79,0,0" TextWrapping="WrapWithOverflow" VerticalAlignment="Top" FontSize="20">
+            调用自定义 <LineBreak/>
+            COM
+        </TextBlock>
+        <Button x:Name="addBtn" Content="求和" HorizontalAlignment="Left" Margin="687,68,0,0" VerticalAlignment="Top" Width="103" Height="26" FontSize="16" Click="AddBtn_Click"/>
+        <Button x:Name="mulBtn" Content="求乘" HorizontalAlignment="Left" Margin="687,124,0,0" VerticalAlignment="Top" Width="103" Height="26" FontSize="16" Click="MulBtn_Click"/>
 
     </Grid>
 </UserControl>
