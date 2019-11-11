@@ -191,7 +191,7 @@ namespace WinProcedure
 
         private void Join_Click(object sender, RoutedEventArgs e)
         {
-            Thread thread1 = new Thread(() =>  Thread.Sleep(600));
+            Thread thread1 = new Thread(() => Thread.Sleep(600));
             Thread thread2 = new Thread(() => Thread.Sleep(1000));
 
             thread1.Start();
@@ -216,7 +216,7 @@ namespace WinProcedure
         //TODO 同步方法
         private void Sync_Click(object sender, RoutedEventArgs e)
         {
-            outputText.Text +=  "****************Sync_Btn_Click start" + " ,Time: " + DateTime.Now + "******************\n";
+            outputText.Text += "****************Sync_Btn_Click start" + " ,Time: " + DateTime.Now + "******************\n";
             Thread thread1 = new Thread(new ThreadStart(doSomeThingLong));
             thread1.Name = "doSomeThingLong thread_1";
             Thread thread2 = new Thread(new ThreadStart(doSomeThingLong));
@@ -264,23 +264,144 @@ namespace WinProcedure
             thread4.Start();
         }
 
+        private void AsyncCall_Click(object sender, RoutedEventArgs e)
+        {
+            //Task task = new Task(SchedulerWork);task.Start();
+            Task.Factory.StartNew(SchedulerWork);
+            outputText.Text += "Thread_1 start\n";
+            outputText.Text += "Thread_2 start\n";
+            outputText.Text += "Thread_3 start\n";
+
+        }
+        private void SchedulerWork()
+        {
+            Task task1 = new Task(() => BeginThread("Thread_1 end"));
+            Task task2 = new Task(() => BeginThread("Thread_2 end"));
+            Task task3 = new Task(() => BeginThread("Thread_3 end"));
+
+            task1.Start();
+            task2.Start();
+            task3.Start();
+            Task.WaitAll(task1, task2, task3);
+        }
+        private void BeginThread(String text)
+        {
+            int i = 100000;
+            while(i > 0)
+            {
+                i--;
+            }
+            this.Dispatcher.BeginInvoke(new Action(() => outputText.Text += text + "\n"));
+        }
+        public delegate void updateOutput(object text);
+        private void updateOutput_Method(object text)
+        {
+            outputText.Text += text.ToString() + "\n";
+        }
+        updateOutput update;
+
+        private String DoAsync(int a, int b)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+
+                
+            }
+            return null;
+        }
+
+        delegate string doAsync(int a, int b);
+
+        private void asyncCallBack(IAsyncResult result)
+        {
+            doAsync doAsync = (doAsync)result.AsyncState;
+            string outString = doAsync.EndInvoke(result);
+
+            updateOutput_Method(outString);
+        }
+
         //// 定义一个回调
         //AsyncCallback callback = p =>
         //{
         //    Console.WriteLine($"到这里计算已经完成了。{Thread.CurrentThread.ManagedThreadId.ToString("00")}。");
-        //    update($"到这里计算已经完成了。" + Thread.CurrentThread.ManagedThreadId.ToString("00") + "。");
+        //    updateOutput($"到这里计算已经完成了。" + Thread.CurrentThread.ManagedThreadId.ToString("00") + "。");
+
         //};
 
 
-        private void AsyncCall_Click(object sender, RoutedEventArgs e)
+        private void AsyncCall_Click1(object sender, RoutedEventArgs e)
         {
-            ////异步调用回调
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    string name = string.format($"btnsync_click_{i}");
+            //异步调用回调
 
-            //    asyncresult = action.begininvoke(name, callback, null);
-            //}
+            //string name = string.format($"btnsync_click_{i}");
+            //asyncresult = action.begininvoke(name, callback, null);
+
+            //更新UI的委托
+            update = new updateOutput(updateOutput_Method);
+            //需要做任务操作的任务代码执行体
+            //doAsync do_things = new doAsync(asyncCallBack);
+
+
+        }
+
+        private void autoReset_Click(object sender, RoutedEventArgs e)
+        {
+            Thread t = null;
+            AutoResetEvent _event = new AutoResetEvent(false);
+            for(int i = 0; i < 4; i++)
+            {
+                t = new Thread(() =>
+                {
+                    while (true)
+                    {
+                        //阻塞当前进程
+                        _event.WaitOne();
+                        string name = Thread.CurrentThread.Name;
+                        this.Dispatcher.Invoke(new Action(() => outputText.Text += "线程 " + name + "\n"));
+                        Thread.Sleep(500);
+                    }
+                });
+                t.Name = "thread_" + i;
+                t.Start();
+            }
+            //0.5秒后允许一个等待的线程继续，当前允许线程1
+            Thread.Sleep(500);
+            _event.Set();
+            //0.5秒后允许一个等待的线程继续，当前允许的是线程2
+            Thread.Sleep(500);
+            _event.Set();
+
+            //使用AutoResetEvent的WaitOne()将线程阻塞时，需要调用5次Set()才能恢复
+        }
+
+        private void manualReset_Click(object sender, RoutedEventArgs e)
+        {
+            Thread t = null;
+            //初始化非终止状态，WaitOne()可以直接阻塞所在的线程
+            ManualResetEvent _event = new ManualResetEvent(false);
+            for (int i = 0; i < 4; i++)
+            {
+                t = new Thread(() =>
+                {
+                    while (true)
+                    {
+                        //阻塞当前进程
+                        _event.WaitOne();
+                        string name = Thread.CurrentThread.Name;
+                        this.Dispatcher.Invoke(new Action(() => outputText.Text += "线程 " + name + "\n"));
+
+                        //ManualResetEvent需要手动 Reset
+                        _event.Reset();
+                        Thread.Sleep(500);
+                    }
+                });
+                t.Name = "thread_" + i;
+                t.Start();
+            }
+            //0.5秒后允许 所有 等待的线程继续，当前允许线程1
+            Thread.Sleep(500);
+            _event.Set();
+
         }
     }
 }
