@@ -38,7 +38,7 @@
                 <Frame Source="FileOp.xaml"  Background="White"/>
             </TabItem>
             <TabItem Name="MessageTab" Header="消息相关">
-                <local:Message></local:Message>
+                <local:Message ></local:Message>
             </TabItem>
         </TabControl>
 

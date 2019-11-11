@@ -37,7 +37,7 @@ namespace WinProcedure
         //}
 
         private void PinYinBtn_Click(object sender, RoutedEventArgs e)
-        {
+        {           
             String chinese = inputText.Text.Trim();
             if(chinese == null || chinese == "")
             {

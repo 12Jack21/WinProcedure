@@ -26,9 +26,7 @@ namespace WinProcedure
         public Message()
         {
             InitializeComponent();
-            OnSourceInitialized();
         }
-
         private void OpenBtn_Click(object sender, RoutedEventArgs e)
         {
             WindowSender msgSender = new WindowSender();
@@ -41,40 +39,24 @@ namespace WinProcedure
 
         private void ClearBtn_Click(object sender, RoutedEventArgs e)
         {
-            this.MsgReceived.Text = "";
+            //Message message = (Message)this.MessageTab.Content;
+            MsgReceived.Text = "";
         }
-
+    }
+    public partial class MainWindow
+    {
         const int WM_COPYDATA = 0x004A;
 
-        //protected override void OnSourceInitialized(EventArgs e)
-        //{
-        //    base.OnSourceInitialized(e);
-        //    HwndSource hwndSource = PresentationSource.FromVisual(this) as HwndSource;
-        //    if (hwndSource != null)
-        //    {
-        //        IntPtr handle = hwndSource.Handle;
-        //        hwndSource.AddHook(new HwndSourceHook(WndProc));
-        //    }
-        //}
-
-        private void OnSourceInitialized()
+        protected override void OnSourceInitialized(EventArgs e)
         {
-            //this.OnSourceInitialized(e);
-            Window window = Window.GetWindow(this);
-            var window1 = VisualTreeHelper.GetParent(this);
-            Window window2 = (Window)this.Parent;
-            Window window3 = Application.Current.MainWindow;
-
-            HwndSource hwndSource = PresentationSource.FromVisual(window3) as HwndSource;
-            //HwndSource hwndSource = PresentationSource.FromVisual(Window.GetWindow(this)) as HwndSource;
-
+            base.OnSourceInitialized(e);
+            HwndSource hwndSource = PresentationSource.FromVisual(this) as HwndSource;
             if (hwndSource != null)
             {
                 IntPtr handle = hwndSource.Handle;
                 hwndSource.AddHook(new HwndSourceHook(WndProc));
             }
         }
-
         // 处理消息
         protected virtual IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
@@ -83,7 +65,8 @@ namespace WinProcedure
                 case WM_COPYDATA:
                     COPYDATASTRUCT cds = (COPYDATASTRUCT)Marshal.PtrToStructure(lParam, typeof(COPYDATASTRUCT));
                     string str = cds.lpData;
-                    MsgReceived.AppendText(str + "\n");
+                    Message message = (Message)this.MessageTab.Content;
+                    message.MsgReceived.AppendText(str + "\n");
                     handled = true;
                     break;
             }
