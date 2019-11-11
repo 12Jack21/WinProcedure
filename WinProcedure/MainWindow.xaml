@@ -11,7 +11,6 @@
         <TabControl x:Name="tabControl" HorizontalAlignment="Left" VerticalAlignment="Top" Height="478" Margin="0,0,-0.4,0" Width="818">
             <TabItem x:Name="textTab" Header="文本相关">
                 <Grid Background="#FFE5E5E5">
-
                     <Label x:Name="hanziLabel" Content="输入汉字" HorizontalAlignment="Left" Margin="167,72,0,0" VerticalAlignment="Top" Width="70"/>
                     <TextBox x:Name="inputText" HorizontalAlignment="Left" Height="23" Margin="167,103,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
                     <ListBox x:Name="ouputList" HorizontalAlignment="Left" Height="230" Margin="167,131,0,0" VerticalAlignment="Top" Width="170"/>
@@ -38,7 +37,9 @@
             <TabItem x:Name="FileTab" Header="File相关">
                 <Frame Source="FileOp.xaml"  Background="White"/>
             </TabItem>
-
+            <TabItem Name="MessageTab" Header="消息相关">
+                <local:Message></local:Message>
+            </TabItem>
         </TabControl>
 
     </Grid>
