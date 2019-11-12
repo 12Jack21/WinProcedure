@@ -50,7 +50,7 @@ namespace WinProcedure
                 process.StandardInput.WriteLine("exit");
                 //  Console.WriteLine("开始执行");
                 process.OutputDataReceived += (s, _e) => AppendResult(_e.Data);
-                // 退出时的回调函数，解除按钮的禁用
+                // 退出时的回调函数，恢复按钮
                 process.Exited += (s, _e) => asyncPingBtn.Dispatcher.BeginInvoke(new Action(() => asyncPingBtn.IsEnabled = true));
                 process.Exited += (s, _e) => getMacBtn.Dispatcher.BeginInvoke(new Action(() => getMacBtn.IsEnabled = true));
 
@@ -112,11 +112,10 @@ namespace WinProcedure
         {
             outputText.Text = "当前线程的信息如下所示";
             Thread currentThread = Thread.CurrentThread;
-            currentThread.Name = "Thread_0";
-            outputText.Text += "\n 线程名 : " + currentThread.Name;
-            outputText.Text += "\n 线程状态 : " + currentThread.ThreadState.ToString();
-            outputText.Text += "\n 运行的上下文环境 : " + currentThread.ExecutionContext;
-            outputText.Text += "\n 线程优先级 : " + currentThread.Priority + "\n";
+            outputText.Text += "\n线程名 :" + currentThread.Name == null?"null": currentThread.Name;
+            outputText.Text += "\n线程状态 :" + currentThread.ThreadState.ToString();
+            outputText.Text += "\n运行的上下文环境 :" + currentThread.ExecutionContext;
+            outputText.Text += "\n线程优先级 :" + currentThread.Priority + "\n";
         }
 
         //定义无参方法
@@ -140,8 +139,8 @@ namespace WinProcedure
         {
             outputText.Text += "线程创建...\n";
             //创建线程
-            //启动线程
             Thread thread1 = new Thread(new ThreadStart(NormalMethod));
+            //启动线程
             thread1.Start();
 
             //通过匿名委托创建
@@ -163,30 +162,21 @@ namespace WinProcedure
 
         }
 
-        private int front_num = 0;
-        private int back_num = 0;
+        private int front_num = 1;
+        private int back_num = 1;
         private void Front_Click(object sender, RoutedEventArgs e)
         {
+            Random random = new Random();
+            bool isBackgroud;
             //默认创建的即为前台进程
-            Thread front;
-            for (int i = 0; i < 3; i++)
+            Thread t;
+            for (int i = 0; i < 10; i++)
             {
-                front = new Thread(() => Thread.Sleep(300));
-                front.Start();
-                outputText.Text += "前台进程计数：" + front_num++ + "\n";
-            }
-        }
-
-        private void Back_Click(object sender, RoutedEventArgs e)
-        {
-            //默认创建的即为前台进程
-            Thread back;
-            for (int i = 0; i < 3; i++)
-            {
-                back = new Thread(() => Thread.Sleep(300) );
-                back.IsBackground = true; // 设置为后台进程
-                back.Start();
-                outputText.Text += "后台进程计数：" + back_num++ + "\n";
+                t = new Thread(() => Thread.Sleep(300));
+                isBackgroud = random.NextDouble() >= 0.5 ? true : false;
+                t.IsBackground = isBackgroud;
+                t.Start();
+                outputText.Text += (isBackgroud ? "后台":"前台")  + "进程计数：" + (isBackgroud? back_num++ : front_num++) + "\n";
             }
         }
 
@@ -194,14 +184,17 @@ namespace WinProcedure
         {
             Thread thread1 = new Thread(() => Thread.Sleep(600));
             Thread thread2 = new Thread(() => Thread.Sleep(1000));
-
+            Thread thread3 = new Thread(() => Thread.Sleep(1200));
             thread1.Start();
             thread2.Start();
+            thread3.Start();
+
             thread1.Join();
             outputText.Text += "600毫秒线程结束\n";
-
             thread2.Join();
             outputText.Text += "1000毫秒线程结束\n";
+            thread3.Join();
+            outputText.Text += "1200毫秒线程结束\n";
         }
 
         private void doSomeThingLong()
@@ -214,7 +207,7 @@ namespace WinProcedure
             outputText.Dispatcher.Invoke(new Action(() => outputText.Text += Name + " start\n"));
             Thread.Sleep(200);
         }
-        //TODO 同步方法
+        // 同步方法
         private void Sync_Click(object sender, RoutedEventArgs e)
         {
             outputText.Text += "****************Sync_Btn_Click start" + " ,Time: " + DateTime.Now + "******************\n";
@@ -294,7 +287,6 @@ namespace WinProcedure
             }
             this.Dispatcher.BeginInvoke(new Action(() => outputText.Text += text + "\n"));
         }
-        #region 异步回调的一种
         public delegate void updateOutput(object text);
         private void updateOutput_Method(object text)
         {
@@ -306,8 +298,6 @@ namespace WinProcedure
         {
             for (int i = 0; i < 5; i++)
             {
-
-
             }
             return null;
         }
@@ -329,6 +319,8 @@ namespace WinProcedure
         //    updateOutput($"到这里计算已经完成了。" + Thread.CurrentThread.ManagedThreadId.ToString("00") + "。");
 
         //};
+
+
         private void AsyncCall_Click1(object sender, RoutedEventArgs e)
         {
             //异步调用回调
@@ -343,7 +335,6 @@ namespace WinProcedure
 
 
         }
-        #endregion
 
         private void autoReset_Click(object sender, RoutedEventArgs e)
         {
@@ -365,14 +356,14 @@ namespace WinProcedure
                 t.Name = "thread_" + i;
                 t.Start();
             }
-            //0.5秒后允许一个等待的线程继续，当前允许线程1（一次Set()只能允许一个线程）
+            //0.5秒后允许一个等待的线程继续，当前允许线程1
             Thread.Sleep(500);
             _event.Set();
             //0.5秒后允许一个等待的线程继续，当前允许的是线程2
             Thread.Sleep(500);
             _event.Set();
 
-            //使用AutoResetEvent的WaitOne()将线程阻塞时，需要调用5次Set()才能恢复
+            //使用AutoResetEvent的 WaitOne()将线程阻塞时，需要调用5次Set()才能恢复
         }
 
         private void manualReset_Click(object sender, RoutedEventArgs e)
@@ -399,7 +390,7 @@ namespace WinProcedure
                 t.Name = "thread_" + i;
                 t.Start();
             }
-            //0.5秒后允许所有 等待的线程继续
+            //0.5秒后允许 所有 等待的线程继续，当前允许线程1
             Thread.Sleep(500);
             _event.Set();
 
@@ -423,16 +414,17 @@ namespace WinProcedure
         Mutex outSlotMutex = new Mutex();
         // 已经预定生产的数量
         int producingCnt = 0;
+
+
         int producedCnt = 0;
         int consumedCnt = 0;
 
-        #region 信号量同步
 
         // 初始化生产参数
         private void InitProductParams()
         {
-            producingCnt = 0;
-            producedCnt = 0;
+            producingCnt = 0;///current product
+            producedCnt = 0;//total product 
             consumedCnt = 0;
             inIdx = 0;
             outIdx = 0;
@@ -442,11 +434,14 @@ namespace WinProcedure
         private void Produce_Click(object sender, RoutedEventArgs e)
         {
             InitProductParams();
+            
             int producerCnt, consumerCnt;
 
+            producerCnt = 2; //生产者个数
+            consumerCnt = 4; //消费者个数
             outputText.AppendText(string.Format("缓冲区大小为{0}, 生产目标个数为{1}\n", BUFF_SIZE, TOTAL_PRODUCT));
-            producerCnt = 3; //生产者个数
-            consumerCnt = 2; //消费者个数
+            outputText.AppendText(string.Format("生产者个数为{0}, 消费者个数为{1}\n", producerCnt, consumerCnt));
+
             empty = new Semaphore(BUFF_SIZE, BUFF_SIZE);
             full = new Semaphore(0, BUFF_SIZE);
 
@@ -477,13 +472,14 @@ namespace WinProcedure
                 totalCntMutex.WaitOne();
                 if (producingCnt >= TOTAL_PRODUCT)
                 {
-                    AppendCommonSemResult(string.Format("---达到预定生产目标{0}, {1}结束---\n", TOTAL_PRODUCT, obj.ToString()));
+                    AppendCommonSemResult(string.Format("---达到预定生产目标: {0} 个, {1}工作结束---\n", TOTAL_PRODUCT, obj.ToString()));
                     totalCntMutex.ReleaseMutex();
                     return;
                 }
                 // 未生产完，继续
                 producingCnt++;
                 totalCntMutex.ReleaseMutex();
+
                 empty.WaitOne();
                 // 放入缓冲区时才获取锁
                 inSlotMutex.WaitOne();
@@ -510,7 +506,9 @@ namespace WinProcedure
                     return;
                 }
                 totalCntMutex.ReleaseMutex();
+
                 full.WaitOne();
+
                 outSlotMutex.WaitOne();
                 AppendConSemResult(string.Format("---{0}开始消费---\n", obj.ToString()));
                 // 这里先取再耗时消费
@@ -534,7 +532,7 @@ namespace WinProcedure
                 inIdx++;
                 outputText.AppendText(data + "\n");
                 outputText.ScrollToEnd();
-                outputText.AppendText("已生产了" + producedCnt + "个,消费了" + consumedCnt + "个\n");
+                outputText.AppendText("当前状态：已生产了" + producedCnt + "个,消费了" + consumedCnt + "个\n");
             }));
         }
 
@@ -548,7 +546,7 @@ namespace WinProcedure
                 consumedCnt++;
                 outputText.AppendText(data + "\n");
                 outputText.ScrollToEnd();
-                outputText.AppendText("已生产了" + producedCnt + "个,消费了" + consumedCnt + "个\n");
+                outputText.AppendText("当前状态：已生产了" + producedCnt + "个,消费了" + consumedCnt + "个\n");
             }));
         }
 
@@ -562,7 +560,7 @@ namespace WinProcedure
                 //Lbl_Produced_Cnt.Content = "" + producedCnt;
             }));
         }
-        #endregion
+    
 
 
     }

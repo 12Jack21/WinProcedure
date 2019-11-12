@@ -42,7 +42,7 @@ namespace WinProcedure
         // 通过进程名找到窗口句柄
         private void FindWndHandlerByName(string name)
         {
-
+            // 遍历所有进程
             Process[] procs = Process.GetProcesses();
             foreach (Process p in procs)
             {

@@ -17,15 +17,14 @@
         <TextBox x:Name="outputText" HorizontalAlignment="Left" Height="406" Margin="150,10,0,0"  VerticalAlignment="Top" Width="466"/>
         <Button x:Name="current" Content="当前线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,100,681,0" Click="current_Click" />
         <Button x:Name="create" Content="创建线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,124,681,0" Click="create_Click" />
-        <Button x:Name="front" Content="前台线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,148,681,0" Click="Front_Click" />
-        <Button x:Name="back" Content="后台线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,172,681,0" Click="Back_Click" />
-        <Button x:Name="join" Content="Join线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,196,681,0" Click="Join_Click" />
-        <Button x:Name="sync" Content="线程同步" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,220,681,0" Click="Sync_Click" />
-        <Button x:Name="async" Content="线程异步" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,244,681,0" Click="Async_Click" />
-        <Button x:Name="asyncCall" Content="线程异步回调" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,268,681,0" Click="AsyncCall_Click" />
-        <Button x:Name="autoReset" Content="AutoResetEvent" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,292,681,0" Click="autoReset_Click" />
-        <Button x:Name="manualReset"  Content="ManualResetEvent" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,316,681,0" Click="manualReset_Click" />
-        <Button x:Name="produce"  Content="生产者消费者" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,340,681,0" Click="Produce_Click" />
+        <Button x:Name="front" Content="前后台线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="27,148,681,0" Click="Front_Click" />
+        <Button x:Name="join" Content="Join线程" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="22,174,676,0" Click="Join_Click" />
+        <Button x:Name="sync" Content="线程同步" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="22,198,676,0" Click="Sync_Click" />
+        <Button x:Name="async" Content="线程异步" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="22,222,676,0" Click="Async_Click" />
+        <Button x:Name="asyncCall" Content="线程异步回调" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="22,246,676,0" Click="AsyncCall_Click" />
+        <Button x:Name="autoReset" Content="AutoResetEvent" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="22,270,676,0" Click="autoReset_Click" />
+        <Button x:Name="manualReset"  Content="ManualResetEvent" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="22,294,676,0" Click="manualReset_Click" />
+        <Button x:Name="produce"  Content="生产者消费者" HorizontalAlignment="Center" VerticalAlignment="Top" Width="102" Height="Auto" Margin="22,318,676,0" Click="Produce_Click" />
         <Label Content="线程" HorizontalAlignment="Left" Margin="27,55,0,0" VerticalAlignment="Top" Width="102" FontSize="18px"/>
     </Grid>
 </Page>
