@@ -50,7 +50,7 @@ namespace WinProcedure
                 process.StandardInput.WriteLine("exit");
                 //  Console.WriteLine("开始执行");
                 process.OutputDataReceived += (s, _e) => AppendResult(_e.Data);
-                // 退出时的回调函数，恢复按钮
+                // 退出时的回调函数，解除按钮的禁用
                 process.Exited += (s, _e) => asyncPingBtn.Dispatcher.BeginInvoke(new Action(() => asyncPingBtn.IsEnabled = true));
                 process.Exited += (s, _e) => getMacBtn.Dispatcher.BeginInvoke(new Action(() => getMacBtn.IsEnabled = true));
 
@@ -112,10 +112,11 @@ namespace WinProcedure
         {
             outputText.Text = "当前线程的信息如下所示";
             Thread currentThread = Thread.CurrentThread;
-            outputText.Text += "\n线程名 :" + currentThread.Name;
-            outputText.Text += "\n线程状态 :" + currentThread.ThreadState.ToString();
-            outputText.Text += "\n运行的上下文环境 :" + currentThread.ExecutionContext;
-            outputText.Text += "\n线程优先级 :" + currentThread.Priority + "\n";
+            currentThread.Name = "Thread_0";
+            outputText.Text += "\n 线程名 : " + currentThread.Name;
+            outputText.Text += "\n 线程状态 : " + currentThread.ThreadState.ToString();
+            outputText.Text += "\n 运行的上下文环境 : " + currentThread.ExecutionContext;
+            outputText.Text += "\n 线程优先级 : " + currentThread.Priority + "\n";
         }
 
         //定义无参方法
@@ -170,7 +171,7 @@ namespace WinProcedure
             Thread front;
             for (int i = 0; i < 3; i++)
             {
-                front = new Thread(() => { });
+                front = new Thread(() => Thread.Sleep(300));
                 front.Start();
                 outputText.Text += "前台进程计数：" + front_num++ + "\n";
             }
@@ -182,7 +183,7 @@ namespace WinProcedure
             Thread back;
             for (int i = 0; i < 3; i++)
             {
-                back = new Thread(() => { });
+                back = new Thread(() => Thread.Sleep(300) );
                 back.IsBackground = true; // 设置为后台进程
                 back.Start();
                 outputText.Text += "后台进程计数：" + back_num++ + "\n";
@@ -293,6 +294,7 @@ namespace WinProcedure
             }
             this.Dispatcher.BeginInvoke(new Action(() => outputText.Text += text + "\n"));
         }
+        #region 异步回调的一种
         public delegate void updateOutput(object text);
         private void updateOutput_Method(object text)
         {
@@ -327,8 +329,6 @@ namespace WinProcedure
         //    updateOutput($"到这里计算已经完成了。" + Thread.CurrentThread.ManagedThreadId.ToString("00") + "。");
 
         //};
-
-
         private void AsyncCall_Click1(object sender, RoutedEventArgs e)
         {
             //异步调用回调
@@ -343,6 +343,7 @@ namespace WinProcedure
 
 
         }
+        #endregion
 
         private void autoReset_Click(object sender, RoutedEventArgs e)
         {
@@ -364,7 +365,7 @@ namespace WinProcedure
                 t.Name = "thread_" + i;
                 t.Start();
             }
-            //0.5秒后允许一个等待的线程继续，当前允许线程1
+            //0.5秒后允许一个等待的线程继续，当前允许线程1（一次Set()只能允许一个线程）
             Thread.Sleep(500);
             _event.Set();
             //0.5秒后允许一个等待的线程继续，当前允许的是线程2
@@ -398,7 +399,7 @@ namespace WinProcedure
                 t.Name = "thread_" + i;
                 t.Start();
             }
-            //0.5秒后允许 所有 等待的线程继续，当前允许线程1
+            //0.5秒后允许所有 等待的线程继续
             Thread.Sleep(500);
             _event.Set();
 
@@ -441,15 +442,6 @@ namespace WinProcedure
         private void Produce_Click(object sender, RoutedEventArgs e)
         {
             InitProductParams();
-            //try
-            //{
-            //    CreateBufferGrid();
-            //}
-            //catch (Exception)
-            //{
-            //    MessageBox.Show("缓冲区个数应小于12且为正整数！");
-            //    return;
-            //}
             int producerCnt, consumerCnt;
 
             outputText.AppendText(string.Format("缓冲区大小为{0}, 生产目标个数为{1}\n", BUFF_SIZE, TOTAL_PRODUCT));
