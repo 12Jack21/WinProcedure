@@ -13,7 +13,7 @@
 
                     <DataGrid x:Name="roomTypeGrid" HorizontalAlignment="Left" Height="178" Margin="140,47,0,0" VerticalAlignment="Top" Width="530" SelectionChanged="DataGrid_SelectionChanged"/>
                     <DataGrid Margin="140,247,124,0"/>
-                    <Button x:Name="showNumBtn" Content="显示房号" HorizontalAlignment="Left" Margin="689,75,0,0" VerticalAlignment="Top" Width="95" Height="40"/>
+                    <Button x:Name="showNumBtn" Content="显示房号" HorizontalAlignment="Left" Margin="689,75,0,0" VerticalAlignment="Top" Width="95" Height="40" Click="showNumBtn_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="MySQL数据管理" Name="sqlManage">
