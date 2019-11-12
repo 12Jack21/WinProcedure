@@ -162,30 +162,21 @@ namespace WinProcedure
 
         }
 
-        private int front_num = 0;
-        private int back_num = 0;
+        private int front_num = 1;
+        private int back_num = 1;
         private void Front_Click(object sender, RoutedEventArgs e)
         {
+            Random random = new Random();
+            bool isBackgroud;
             //默认创建的即为前台进程
-            Thread front;
-            for (int i = 0; i < 3; i++)
+            Thread t;
+            for (int i = 0; i < 10; i++)
             {
-                front = new Thread(() => { });
-                front.Start();
-                outputText.Text += "前台进程计数：" + front_num++ + "\n";
-            }
-        }
-
-        private void Back_Click(object sender, RoutedEventArgs e)
-        {
-            //默认创建的即为前台进程
-            Thread back;
-            for (int i = 0; i < 3; i++)
-            {
-                back = new Thread(() => { });
-                back.IsBackground = true; // 设置为后台进程
-                back.Start();
-                outputText.Text += "后台进程计数：" + back_num++ + "\n";
+                t = new Thread(() => Thread.Sleep(300));
+                isBackgroud = random.NextDouble() >= 0.5 ? true : false;
+                t.IsBackground = isBackgroud;
+                t.Start();
+                outputText.Text += (isBackgroud ? "后台":"前台")  + "进程计数：" + (isBackgroud? back_num++ : front_num++) + "\n";
             }
         }
 
@@ -193,14 +184,17 @@ namespace WinProcedure
         {
             Thread thread1 = new Thread(() => Thread.Sleep(600));
             Thread thread2 = new Thread(() => Thread.Sleep(1000));
-
+            Thread thread3 = new Thread(() => Thread.Sleep(1200));
             thread1.Start();
             thread2.Start();
+            thread3.Start();
+
             thread1.Join();
             outputText.Text += "600毫秒线程结束\n";
-
             thread2.Join();
             outputText.Text += "1000毫秒线程结束\n";
+            thread3.Join();
+            outputText.Text += "1200毫秒线程结束\n";
         }
 
         private void doSomeThingLong()
@@ -304,8 +298,6 @@ namespace WinProcedure
         {
             for (int i = 0; i < 5; i++)
             {
-
-
             }
             return null;
         }

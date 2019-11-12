@@ -8,10 +8,14 @@
       d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        <TextBox x:Name="MsgReceived" FontSize="20px" HorizontalAlignment="Left" Height="286" Margin="122,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="464"/>
-        <Label Content="收到的消息" FontSize="18px" HorizontalAlignment="Left" Margin="122,65,0,0" VerticalAlignment="Top" Width="150"/>
-        <Button x:Name="openBtn" Content="打开发送消息的窗体" HorizontalAlignment="Left" Margin="613,155,0,0" VerticalAlignment="Top" Width="149" Height="36" Click="OpenBtn_Click"/>
-        <Button x:Name="clearBtn" Content="清空收到的消息" HorizontalAlignment="Left" Margin="613,228,0,0" VerticalAlignment="Top" Width="149" Height="36" Click="ClearBtn_Click"/>
+        <TextBox x:Name="MsgReceived" FontSize="20px" HorizontalAlignment="Left" Height="150" Margin="118,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="472"/>
+        <Label Content="收到的消息" FontSize="18px" HorizontalAlignment="Left" Margin="118,10,0,0" VerticalAlignment="Top" Width="150"/>
+        <Button x:Name="openBtn" Content="打开发送消息的窗体" HorizontalAlignment="Left" Margin="617,71,0,0" VerticalAlignment="Top" Width="149" Height="36" Click="OpenBtn_Click"/>
+        <Button x:Name="clearBtn" Content="清空收到的消息" HorizontalAlignment="Left" Margin="617,130,0,0" VerticalAlignment="Top" Width="149" Height="36" Click="ClearBtn_Click"/>
+        <Label Content="事件处理" FontSize="18px" HorizontalAlignment="Left" Margin="118,225,0,0" VerticalAlignment="Top" Width="150"/>
+        <TextBox x:Name="fireText" FontSize="11px" HorizontalAlignment="Left" Height="150" Margin="118,263,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="472"/>
+        <Button x:Name="fireBtn1" Content="事件处理1" FontSize="14px" HorizontalAlignment="Left" Margin="617,287,0,0" VerticalAlignment="Top" Width="149" Height="42" Click="fireBtn1_Click"/>
+        <Button x:Name="fireBtn2" Content="事件处理2" FontSize="14px" HorizontalAlignment="Left" Margin="617,334,0,0" VerticalAlignment="Top" Width="149" Height="42" Click="fireBtn2_Click"/>
 
     </Grid>
 </UserControl>
