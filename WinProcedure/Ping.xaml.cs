@@ -112,7 +112,7 @@ namespace WinProcedure
         {
             outputText.Text = "当前线程的信息如下所示";
             Thread currentThread = Thread.CurrentThread;
-            outputText.Text += "\n线程名 :" + currentThread.Name;
+            outputText.Text += "\n线程名 :" + currentThread.Name == null?"null": currentThread.Name;
             outputText.Text += "\n线程状态 :" + currentThread.ThreadState.ToString();
             outputText.Text += "\n运行的上下文环境 :" + currentThread.ExecutionContext;
             outputText.Text += "\n线程优先级 :" + currentThread.Priority + "\n";

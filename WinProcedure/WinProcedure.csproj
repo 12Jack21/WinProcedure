@@ -82,10 +82,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CustomedAPI.cs" />
+    <Compile Include="DataBase.xaml.cs">
+      <DependentUpon>DataBase.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowSender.xaml.cs">
       <DependentUpon>WindowSender.xaml</DependentUpon>
     </Compile>
     <Page Include="COMop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

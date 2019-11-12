@@ -40,6 +40,9 @@
             <TabItem Name="MessageTab" Header="消息相关">
                 <local:Message ></local:Message>
             </TabItem>
+            <TabItem Name="DatabaseTab" Header="DataBase相关">
+                <local:DataBase></local:DataBase>
+            </TabItem>
         </TabControl>
 
     </Grid>

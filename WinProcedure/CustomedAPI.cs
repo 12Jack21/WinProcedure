@@ -18,4 +18,21 @@ namespace WinProcedure
             public string lpData;   // 消息字符串
         }
     }
+    public class RoomType
+    {
+        public string id { get; set; }
+        public string name { get; set; }
+        public string feature { get; set; }
+        public double price { get; set; }
+        public string state { get; set; }
+
+    }
+    public class Room
+    {
+        //房号
+        public string id { get; set; }
+        //房型编号
+        public string address { get; set; }
+
+    }
 }
