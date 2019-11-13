@@ -16,7 +16,7 @@
                         <ColumnDefinition Width="562*"/>
                     </Grid.ColumnDefinitions>
 
-                    <DataGrid x:Name="roomTypeGrid" HorizontalAlignment="Left" Height="178" Margin="140,47,0,0" VerticalAlignment="Top" Width="Auto" SelectionChanged="DataGrid_SelectionChanged" AutoGenerateColumns="False" Grid.ColumnSpan="3" Background="AntiqueWhite">
+                    <DataGrid x:Name="roomTypeGrid" HorizontalAlignment="Left" Height="178" Margin="94,39,0,0" VerticalAlignment="Top" Width="528" SelectionChanged="DataGrid_SelectionChanged" AutoGenerateColumns="False" Grid.ColumnSpan="3" Background="AntiqueWhite">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="房型编号" Binding="{Binding Id}" Width="100"></DataGridTextColumn>
                             <DataGridTextColumn Header="房型名称" Binding="{Binding Name}" Width="100"></DataGridTextColumn>
@@ -25,14 +25,17 @@
                             <DataGridTextColumn Header="当前状态" Binding="{Binding State}" Width="80"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <DataGrid Background="AntiqueWhite" x:Name="roomGrid" Margin="41.2,242,230.4,27.6" AutoGenerateColumns="False" Width="370" Grid.Column="1" Grid.ColumnSpan="2">
+                    <DataGrid Background="AntiqueWhite" x:Name="roomGrid" Margin="94,236,172.4,9.6" AutoGenerateColumns="False" Grid.ColumnSpan="3">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="房号" Binding="{Binding No}" Width="120"></DataGridTextColumn>
+                            <DataGridTextColumn Header="房型编号" Binding="{Binding Id}" Width="80"></DataGridTextColumn>
+                            <DataGridTextColumn Header="房号" Binding="{Binding No}" Width="80"></DataGridTextColumn>
                             <DataGridTextColumn Header="地址" Binding="{Binding Address}" Width="120"></DataGridTextColumn>
-                            <DataGridTextColumn Header="当前状态" Binding="{Binding State}" Width="120"></DataGridTextColumn>
+                            <DataGridTextColumn  Header="房型特征" Binding="{Binding Feature}" Width="80"></DataGridTextColumn>
+                            <DataGridTextColumn Header="单价" Binding="{Binding Price}" Width="80"></DataGridTextColumn>
+                            <DataGridTextColumn Header="当前状态" Binding="{Binding State}" Width="80"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button x:Name="showNumBtn" Content="显示房号" HorizontalAlignment="Left" Margin="426.1,122,0,0" VerticalAlignment="Top" Width="95" Height="40" Click="showNoBtn_Click" Grid.Column="2"/>
+                    <Button x:Name="showNumBtn" Content="显示房号" HorizontalAlignment="Left" Margin="408.2,121,0,0" VerticalAlignment="Top" Width="95" Height="40" Click="showNoBtn_Click" Grid.Column="2"/>
                 </Grid>
             </TabItem>
             <TabItem Header="SQLite数据管理" Name="sqlManage">
@@ -78,7 +81,7 @@
                     <Label Content="数据库登陆用户名" FontSize="15px" HorizontalAlignment="Left" Margin="41,44,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                     <Label Content="数据库连接密码" FontSize="15px" HorizontalAlignment="Left" Margin="221,44,0,0" VerticalAlignment="Top" Grid.Column="1"/>
                     <TextBox x:Name="username" HorizontalAlignment="Left" Height="23" FontSize="15px" Margin="37,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="172" Grid.Column="1"/>
-                    <TextBox x:Name="password" HorizontalAlignment="Left" Height="23" FontSize="15px" Margin="341,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="139" Grid.Column="1"/>
+                    <PasswordBox x:Name="password" HorizontalAlignment="Left" Height="23" FontSize="15px" Margin="341,50,0,0"  VerticalAlignment="Top" Width="139" Grid.Column="1"/>
                     <Button x:Name="findInstanceBtn" Content="查找数据库实例" FontSize="14px" HorizontalAlignment="Left" Margin="521,51,0,0" VerticalAlignment="Top" Width="124" Height="35" Click="FindInstanceBtn_Click" Grid.Column="1"/>
                     <Button x:Name="connectBtn" Content="连接测试" FontSize="14px" HorizontalAlignment="Left" Margin="521,91,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="connectBtn_Click"/>
                     <Button x:Name="dataReaderSelectBtn" Content="DataReader查询" FontSize="14px" HorizontalAlignment="Left" Margin="521,131,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="dataReaderSelectBtn_Click"/>

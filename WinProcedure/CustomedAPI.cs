@@ -30,12 +30,26 @@ namespace WinProcedure
     }
     public class Room
     {
+        public string Id { get; set; }
         //房号
         public string No { get; set; }
         //房型编号
         public string Address { get; set; }
 
+        public string Feature { get; set; }
+        public Double Price { get; set; }
         public string State { get; set; }
+
+        public Room() { }
+        public Room(string id, string no, string address, string feature, Double price, string state)
+        {
+            Id = id;
+            No = no;
+            Address = address;
+            Feature = feature;
+            Price = price;
+            State = state;
+        }
     }
 
     public class AttachFile

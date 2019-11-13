@@ -76,10 +76,7 @@ namespace WinProcedure
                     string roomType_id = dt.Rows[i][0].ToString();
                     if (!roomType_id.Equals(roomType.Id))
                         continue;
-                    Room room = new Room();
-                    room.No = dt.Rows[i][1].ToString();
-                    room.Address = dt.Rows[i][2].ToString();
-                    room.State = dt.Rows[i][5].ToString();
+                    Room room = new Room(roomType_id, dt.Rows[i][1].ToString(), dt.Rows[i][2].ToString(), dt.Rows[i][3].ToString(),Convert.ToDouble( dt.Rows[i][4].ToString()), dt.Rows[i][5].ToString());
                     lists.Add(room);
                 }
                 roomGrid.ItemsSource = lists;
@@ -163,7 +160,7 @@ namespace WinProcedure
             string sql = String.Format("Insert Into attach_file(ID,REPORT_NO,FILE_NAME,FILE_INDEX,UP_TIME,CARRY_TIME) Values(@0,@1,@2,@3,@4,@5)");
             cmd.CommandText = sql;
             SQLiteParameter parameter = new SQLiteParameter("@0");
-            parameter.Value = (AttachFile.Count++).ToString();
+            parameter.Value = (++AttachFile.Count).ToString();
             cmd.Parameters.Add(parameter);
             parameter = new SQLiteParameter("@1");
             parameter.Value = file.No;
@@ -285,8 +282,9 @@ namespace WinProcedure
             }
             finally
             {
+                if(reader != null)
                 //⑥关闭DataReader 
-                reader.Close();
+                    reader.Close();
                 if(con != null)
                 //⑦关闭连接 
                     conn.Close();
@@ -295,7 +293,7 @@ namespace WinProcedure
         private MySqlConnection ConnectDatabase()
         {
             String username_ = username.Text;
-            string password_ = password.Text;
+            string password_ = password.Password;
             //if (String.IsNullOrEmpty(username_) || String.IsNullOrEmpty(password_))
             //{
             //    MessageBox.Show("用户名和密码不能为空！");
@@ -314,7 +312,7 @@ namespace WinProcedure
             try
             {
                 String username_ = username.Text;
-                string password_ = password.Text;
+                string password_ = password.Password;
                 if(String.IsNullOrEmpty(username_) || String.IsNullOrEmpty(password_)){
                     MessageBox.Show("用户名和密码不能为空！");
                     return;
