@@ -259,11 +259,54 @@ namespace WinProcedure
 
         private void FindInstanceBtn_Click(object sender, RoutedEventArgs e)
         {
+            MySqlDataReader reader = null;
+            try
+            {
+                con.Open();    //②打开数据库连接
+                cmd = new MySqlCommand("show databases", con); //③使用指定的SQL命令和连接对象创建SqlCommand对象
+                reader = cmd.ExecuteReader(); //④执行Command的ExecuteReader()方法
 
+                //⑤将DataReader绑定到数据控件中 
+                DataTable dt = new DataTable();
+                dt.Load(reader);
+                
+                //添加进入 Combo中
+                for(int i = 0; i < dt.Rows.Count; i++)
+                {
+                    String b = dt.Rows[i].ToString();
+                    String a = dt.Rows[i][0].ToString();
+                    instanceCombo.Items.Add(dt.Rows[i][0].ToString());
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                //⑥关闭DataReader 
+                reader.Close();
+                //⑦关闭连接 
+                conn.Close();
+            }
         }
-
+        private MySqlConnection ConnectDatabase()
+        {
+            String username_ = username.Text;
+            string password_ = password.Text;
+            if (String.IsNullOrEmpty(username_) || String.IsNullOrEmpty(password_))
+            {
+                MessageBox.Show("用户名和密码不能为空！");
+                return null;
+            }
+            MySqlConnection con = new MySqlConnection();
+            con.ConnectionString = "Server=localhost;Database =book;Uid=" + username_ + ";Pwd=" + password_ + ";";
+            con.Open();
+            return con;
+        }
         private void connectBtn_Click(object sender, RoutedEventArgs e)
         {
+            MySqlConnection con = null;
             try
             {
                 String username_ = username.Text;
@@ -272,6 +315,7 @@ namespace WinProcedure
                     MessageBox.Show("用户名和密码不能为空！");
                     return;
                 }
+                con = ConnectDatabase();
                 con.ConnectionString = "Server=localhost;Database =book;Uid=" + username_ + ";Pwd=" + password_ + ";";
                 con.Open();
                 MessageBox.Show("连接MySQL数据库成功！");
@@ -280,14 +324,19 @@ namespace WinProcedure
             {
                 MessageBox.Show(ex.Message);
             }
+            finally
+            {
+                con.Close();
+            }
         }
 
         private void dataReaderSelectBtn_Click(object sender, RoutedEventArgs e)
         {
             MySqlDataReader reader = null;
+            MySqlConnection con = null;
             try
             {
-                con.Open();    //②打开数据库连接
+                con = ConnectDatabase();    //②打开数据库连接
                 cmd = new MySqlCommand("select * from book", con); //③使用指定的SQL命令和连接对象创建SqlCommand对象
                 reader = cmd.ExecuteReader(); //④执行Command的ExecuteReader()方法
 
@@ -309,37 +358,21 @@ namespace WinProcedure
             }
         }
 
-        private void dataAdapterUpdateBtn_Click(object sender, RoutedEventArgs e)
+        private void dataAdapterSelectBtn_Click(object sender, RoutedEventArgs e)
         {
+            MySqlConnection con = ConnectDatabase();
             //建立DataSet对象(相当于建立前台的虚拟数据库)
             DataSet ds = new DataSet();
             //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
             DataTable dtable;
-            //建立DataRowCollection对象(相当于表的行的集合)
-            DataRowCollection coldrow;
-            //建立DataRow对象(相当于表的列的集合)
-            DataRow drow;
 
             string sltStr = "select * from book ";
             MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
             //建立DataAdapter对象  
             MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
-
-            //将查询的结果存到虚拟数据库ds中的虚拟表tabuser中
-            msda.Fill(ds, "book");
-
-            //将数据表tabuser的数据复制到DataTable对象（取数据）
-            dtable = ds.Tables["book"];
-
-            //用DataRowCollection对象获取这个数据表的所有数据行
-            coldrow = dtable.Rows;
-
-            //逐行遍历，取出各行的数据
-            //for (int inti = 0; inti < coldrow.Count; inti++)
-            //{
-            //    drow = coldrow[inti];
-
-            //}
+            
+            //拿到 DataGrid的数据
+            dtable = (bookGrid.ItemsSource as DataView).Table;
 
             bookGrid.ItemsSource = dtable.DefaultView;
         }
@@ -347,27 +380,78 @@ namespace WinProcedure
         //批量更新
         private void dataAdapterBatchUpdateBtn_Click(object sender, RoutedEventArgs e)
         {
+            MySqlConnection con = ConnectDatabase();
             //建立DataSet对象(相当于建立前台的虚拟数据库)
             DataSet ds = new DataSet();
             //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
             DataTable dtable;
-            //建立DataRowCollection对象(相当于表的行的集合)
-            DataRowCollection coldrow;
-            //建立DataRow对象(相当于表的列的集合)
-            DataRow drow;
 
             string sltStr = "select * from book ";
             MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
             //建立DataAdapter对象  
             MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
 
-            //将查询的结果存到虚拟数据库ds中的虚拟表tabuser中
-            msda.Fill(ds, "book");
+            //拿到 DataGrid的数据
+            dtable = (bookGrid.ItemsSource as DataView).Table;
+            int a = msda.Update(dtable);
+            if(a > 0)
+            {
+                MessageBox.Show("批量更新成功！");
+            }
+        }
 
-            //将数据表tabuser的数据复制到DataTable对象（取数据）
-            dtable = ds.Tables["book"];
+        private void addBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MySqlConnection con = ConnectDatabase();
+            //建立DataSet对象(相当于建立前台的虚拟数据库)
+            DataSet ds = new DataSet();
+            //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
+            DataTable dtable;
 
-            msda.Update(dtable);
+            string sltStr = "select * from book ";
+            MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
+            //建立DataAdapter对象  
+            MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
+
+            //拿到 DataGrid的数据
+            dtable = (bookGrid.ItemsSource as DataView).Table;
+            int a = msda.Update(dtable);
+            if (a > 0)
+            {
+                MessageBox.Show("新增成功！");
+            }
+        }
+
+        private void deleteBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MySqlConnection con = ConnectDatabase();
+            int index = bookGrid.SelectedIndex;
+            if(index < 0)
+            {
+                MessageBox.Show("请先选择要删除的记录");
+                return;
+            }
+
+            //建立DataSet对象(相当于建立前台的虚拟数据库)
+            DataSet ds = new DataSet();
+            //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
+            DataTable dtable;
+
+            string sltStr = "select * from book";
+            MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
+            //建立DataAdapter对象  
+            MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
+
+            //拿到 DataGrid的数据
+            dtable = (bookGrid.ItemsSource as DataView).Table;
+            DataRow row = dtable.Rows[index];
+            row.Delete();
+
+            int a = msda.Update(dtable);
+            if(a > 0)
+            {
+                MessageBox.Show("删除成功");
+            }
         }
     }
 }

@@ -64,7 +64,7 @@
                         <ColumnDefinition Width="655*"/>
                     </Grid.ColumnDefinitions>
                     <Label Content="MSSQL数据库实例列表" FontSize="15px" HorizontalAlignment="Left" Margin="35,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <ComboBox Name="instanceList" HorizontalAlignment="Left" Margin="76,10,0,0" VerticalAlignment="Top" Width="260" Height="29" Grid.Column="1"/>
+                    <ComboBox Name="instanceCombo" HorizontalAlignment="Left" Margin="76,10,0,0" VerticalAlignment="Top" Width="260" Height="29" Grid.Column="1"/>
                     <DataGrid x:Name="bookGrid" AutoGenerateColumns="False" Margin="41,84,143,23" Background="DarkGray" Grid.ColumnSpan="2">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="编号" Binding="{Binding No}" Width="100"/>
@@ -82,11 +82,11 @@
                     <Button x:Name="findInstanceBtn" Content="查找数据库实例" FontSize="14px" HorizontalAlignment="Left" Margin="521,51,0,0" VerticalAlignment="Top" Width="124" Height="35" Click="FindInstanceBtn_Click" Grid.Column="1"/>
                     <Button x:Name="connectBtn" Content="连接测试" FontSize="14px" HorizontalAlignment="Left" Margin="521,91,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="connectBtn_Click"/>
                     <Button x:Name="dataReaderSelectBtn" Content="DataReader查询" FontSize="14px" HorizontalAlignment="Left" Margin="521,131,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="dataReaderSelectBtn_Click"/>
-                    <Button x:Name="dataAdapterUpdateBtn" Content="DataAdapter查询" FontSize="12px" HorizontalAlignment="Left" Margin="521,171,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="dataAdapterUpdateBtn_Click"/>
+                    <Button x:Name="dataAdapterSelectBtn" Content="DataAdapter查询" FontSize="12px" HorizontalAlignment="Left" Margin="521,171,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="dataAdapterSelectBtn_Click"/>
                     <Button x:Name="dataAdapterBatchUpdateBtn" Content="DataAdapter批量更新" FontSize="12px" HorizontalAlignment="Left" Margin="521,211,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="dataAdapterBatchUpdateBtn_Click"/>
-                    <Button x:Name="addBtn" Content="新增" FontSize="14px" HorizontalAlignment="Left" Margin="521,251,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1"/>
-                    <Button x:Name="deleteBtn" Content="删除" FontSize="14px" HorizontalAlignment="Left" Margin="521,291,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1"/>
-                    <Button x:Name="saveBtn" Content="保存" FontSize="14px" HorizontalAlignment="Left" Margin="521,331,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1"/>
+                    <Button x:Name="addBtn" Content="新增" FontSize="14px" HorizontalAlignment="Left" Margin="521,251,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="addBtn_Click"/>
+                    <Button x:Name="deleteBtn" Content="删除" FontSize="14px" HorizontalAlignment="Left" Margin="521,291,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="deleteBtn_Click"/>
+                    <Button x:Name="saveBtn" Content="保存" FontSize="14px" Margin="521,331,10,0" VerticalAlignment="Top" Height="35" Grid.Column="1"/>
                 </Grid>
             </TabItem>
         </TabControl>
