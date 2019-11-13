@@ -45,9 +45,8 @@ namespace WinProcedure
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            AttachFile file = new AttachFile(fileNo.Text, fileName.Text, publishTime.DisplayDate.Date.ToShortDateString(), carryTime.DisplayDate.Date.ToShortDateString());
+            AttachFile file = new AttachFile(fileNo.Text, fileName.Text, publishUnit.Text,publishTime.DisplayDate.Date.ToShortDateString(), carryTime.DisplayDate.Date.ToShortDateString());
             database.addToList(file);
-            MessageBox.Show("新增成功");
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)

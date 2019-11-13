@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -51,11 +52,11 @@ namespace WinProcedure
             }
             finally
             {
-                if(ole != null)
+                if (ole != null)
                     ole.Close();
 
             }
-                return schemaTable;
+            return schemaTable;
         }
         private void showNoBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -120,31 +121,38 @@ namespace WinProcedure
         ObservableCollection<AttachFile> fileList = new ObservableCollection<AttachFile>();
         public void addToList(AttachFile file)
         {
-            fileList.Add(file);
+            AddSQLiteData(file);
+            ShowSQLiteData();
+            //fileList.Add(file);
         }
 
-        SQLiteConnection conn = new SQLiteConnection();
+        SQLiteConnection conn;
+        private int count;
 
         private void ShowSQLiteData()
         {
-            string sql = "Select ID,REPORT_NO,FILE_NAME,FILE_INDEX,UP_TIME,CARRY_TIME from attach_file";
+            count = 0;
+            string sql = "Select ID,REPORT_NO,FILE_NAME,FILE_INDEX,UP_USER,UP_TIME,CARRY_TIME from attach_file";
             SQLiteCommand command = conn.CreateCommand();
             command.CommandText = sql;
 
             SQLiteDataReader reader = command.ExecuteReader();
-
+            fileList.Clear();
             while (reader.Read())
             {
-                string a = reader.GetString(0);
-                String b = reader.GetValue(1).ToString();
-                AttachFile attachFile = new AttachFile(reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
+                AttachFile attachFile = new AttachFile(reader.GetValue(1).ToString(), reader.GetValue(2).ToString(), reader.GetValue(3).ToString(),
+                    reader.GetValue(4).ToString(), reader.GetValue(5).ToString(), reader.GetValue(6).ToString());
                 attachFile.ID = reader.GetString(0);
+
+                if (Convert.ToInt32(reader.GetString(0)) > count)
+                    count = Convert.ToInt32(reader.GetString(0));
                 fileList.Add(attachFile);
             }
             fileGrid.ItemsSource = fileList;
         }
         private void GetSQLiteData(string path)
         {
+            conn = new SQLiteConnection();
             conn.ConnectionString = @"Data Source=" + path;
             conn.Open();
         }
@@ -152,20 +160,39 @@ namespace WinProcedure
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
-            string sql = "Insert Into attach_file(ID,REPORT_NO,FILE_NAME,FILE_INDEX,UP_TIME,CARRY_TIME from attach_file) Values(" + Guid.NewGuid() + ",";
-            sql += file.No + "," + file.Name + "," + file.Theme + "," + file.PublishTime + "," + file.CarryTime + ')';
+            string sql = String.Format("Insert Into attach_file(ID,REPORT_NO,FILE_NAME,FILE_INDEX,UP_TIME,CARRY_TIME) Values(@0,@1,@2,@3,@4,@5)");
             cmd.CommandText = sql;
+            SQLiteParameter parameter = new SQLiteParameter("@0");
+            parameter.Value = (AttachFile.Count++).ToString();
+            cmd.Parameters.Add(parameter);
+            parameter = new SQLiteParameter("@1");
+            parameter.Value = file.No;
+            cmd.Parameters.Add(parameter);
+            parameter = new SQLiteParameter("@2");
+            parameter.Value = file.Name;
+            cmd.Parameters.Add(parameter);
+            parameter = new SQLiteParameter("@3");
+            parameter.Value = file.Theme;
+            cmd.Parameters.Add(parameter);
+            parameter = new SQLiteParameter("@4");
+            parameter.Value = file.PublishTime;
+            cmd.Parameters.Add(parameter);
+            parameter = new SQLiteParameter("@5");
+            parameter.Value = file.CarryTime;
+            cmd.Parameters.Add(parameter);
+
             int tag = cmd.ExecuteNonQuery();
-            if(tag >= 1)
+            if (tag >= 1)
             {
                 MessageBox.Show("新增成功");
             }
         }
+        //TODO 修改窗体
         private void ModifySQLiteData(AttachFile file)
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
-            string sql = "Update attach_file Set REPORT_NO =" + file.No + "," + "FILE_NAME=" + file.Name + "," + "FILE_INDEX=" + 
+            string sql = "Update attach_file Set REPORT_NO =" + file.No + "," + "FILE_NAME=" + file.Name + "," + "FILE_INDEX=" +
                 file.Theme + "UP_TIME=" + file.PublishTime + "CARRY_TIME=" + file.CarryTime;
             cmd.CommandText = sql;
             int tag = cmd.ExecuteNonQuery();
@@ -174,12 +201,15 @@ namespace WinProcedure
                 MessageBox.Show("修改成功");
             }
         }
-        private void DeleteSQLiteData(string guid)
+        private void DeleteSQLiteData(string ID)
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
-            string sql = "Delete From attach_file Where ID ="+guid;
+            string sql = "Delete From attach_file Where ID=@0";
             cmd.CommandText = sql;
+            SQLiteParameter parameter = new SQLiteParameter("@0");
+            parameter.Value = ID;
+            cmd.Parameters.Add(parameter);
             int tag = cmd.ExecuteNonQuery();
             if (tag >= 1)
             {
@@ -188,20 +218,250 @@ namespace WinProcedure
         }
         private void createBtn_Click(object sender, RoutedEventArgs e)
         {
-            //GetSQLiteData("../../data/demo.db");
-
             CreateFile create = new CreateFile();
             create.database = this;
 
             create.Show();
-
         }
 
-
-        private void FindInstanceBtn_Click(object sender, RoutedEventArgs e)
+        private void modifyBtn_Click(object sender, RoutedEventArgs e)
         {
 
         }
+        private void deleteBtn__Click(object sender, RoutedEventArgs e)
+        {
+            object selected = fileGrid.SelectedItem;
+            if (selected == null)
+            {
+                MessageBox.Show("请先选择删除的记录！");
+                return;
+            }
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("确定删除?", "删除确认", System.Windows.MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                DeleteSQLiteData((selected as AttachFile).ID);
+                ShowSQLiteData();
+            }
+        }
 
+        //更新数据表
+        private void flashBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ShowSQLiteData();
+        }
+
+        /* ADO.NET 访问MySQL */
+
+        //创建command对象	 
+        private MySqlCommand cmd = null;
+        //创建connection连接对象
+        private MySqlConnection con = null;
+
+        private void FindInstanceBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MySqlDataReader reader = null;
+            MySqlConnection con = null;
+            try
+            {
+                con = ConnectDatabase();    //②打开数据库连接
+                cmd = new MySqlCommand("show databases", con); //③使用指定的SQL命令和连接对象创建SqlCommand对象
+                reader = cmd.ExecuteReader(); //④执行Command的ExecuteReader()方法
+
+                //⑤将DataReader绑定到数据控件中 
+                DataTable dt = new DataTable();
+                dt.Load(reader);
+                
+                //添加进入 Combo中
+                for(int i = 0; i < dt.Rows.Count; i++)
+                {
+                    String b = dt.Rows[i].ToString();
+                    String a = dt.Rows[i][0].ToString();
+                    instanceCombo.Items.Add(dt.Rows[i][0].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                //⑥关闭DataReader 
+                reader.Close();
+                if(con != null)
+                //⑦关闭连接 
+                    conn.Close();
+            }
+        }
+        private MySqlConnection ConnectDatabase()
+        {
+            String username_ = username.Text;
+            string password_ = password.Text;
+            //if (String.IsNullOrEmpty(username_) || String.IsNullOrEmpty(password_))
+            //{
+            //    MessageBox.Show("用户名和密码不能为空！");
+            //    return null;
+            //}  
+            username_ = "root";
+            password_ = "zaoMENG45.";
+            MySqlConnection con = new MySqlConnection();
+            con.ConnectionString = "Server=localhost;Database =book;Uid=" + username_ + ";Pwd=" + password_ + ";";
+            con.Open();
+            return con;
+        }
+        private void connectBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MySqlConnection con = null;
+            try
+            {
+                String username_ = username.Text;
+                string password_ = password.Text;
+                if(String.IsNullOrEmpty(username_) || String.IsNullOrEmpty(password_)){
+                    MessageBox.Show("用户名和密码不能为空！");
+                    return;
+                }
+                con = ConnectDatabase();
+                MessageBox.Show("连接MySQL数据库成功！");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
+        private void dataReaderSelectBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MySqlDataReader reader = null;
+            MySqlConnection con = null;
+            try
+            {
+                con = ConnectDatabase();    //②打开数据库连接
+                cmd = new MySqlCommand("select * from book", con); //③使用指定的SQL命令和连接对象创建SqlCommand对象
+                reader = cmd.ExecuteReader(); //④执行Command的ExecuteReader()方法
+
+                //⑤将DataReader绑定到数据控件中 
+                DataTable dt = new DataTable();
+                dt.Load(reader);
+                bookGrid.ItemsSource = dt.DefaultView;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                //⑥关闭DataReader 
+                reader.Close();
+                //⑦关闭连接 
+                conn.Close();
+            }
+        }
+
+        private void dataAdapterSelectBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MySqlConnection con = ConnectDatabase();
+            //建立DataSet对象(相当于建立前台的虚拟数据库)
+            DataSet ds = new DataSet();
+            //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
+            DataTable dtable = new DataTable();
+
+            string sltStr = "select * from book";
+            MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
+            //建立DataAdapter对象  
+            MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
+
+            //拿到 DataGrid的数据
+            msda.Fill(dtable);
+
+            bookGrid.ItemsSource = dtable.DefaultView;
+        }
+
+        //批量更新
+        private void dataAdapterBatchUpdateBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MySqlConnection con = ConnectDatabase();
+            //建立DataSet对象(相当于建立前台的虚拟数据库)
+            DataSet ds = new DataSet();
+            //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
+            DataTable dtable;
+
+            string sltStr = "select * from book";
+            MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
+            //建立DataAdapter对象  
+            MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
+
+            //dtable
+            //DataView dv = bookGrid.Items
+            //拿到 DataGrid的数据
+            dtable = ((DataView)bookGrid.ItemsSource).Table;
+            var item = bookGrid.Items;
+            DataRowView items = bookGrid.Items[0] as DataRowView;
+            DataTable dt = items.DataView.Table;
+
+
+            //msda.Update();
+            int a = msda.Update(dtable);
+            if(a > 0)
+            {
+                MessageBox.Show("批量更新成功！");
+            }
+        }
+
+        private void addBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MySqlConnection con = ConnectDatabase();
+            //建立DataSet对象(相当于建立前台的虚拟数据库)
+            DataSet ds = new DataSet();
+            //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
+            DataTable dtable;
+
+            string sltStr = "select * from book ";
+            MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
+            //建立DataAdapter对象  
+            MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
+
+            //拿到 DataGrid的数据
+            dtable = (bookGrid.ItemsSource as DataView).Table;
+            int a = msda.Update(dtable);
+            if (a > 0)
+            {
+                MessageBox.Show("新增成功！");
+            }
+        }
+
+        private void deleteBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MySqlConnection con = ConnectDatabase();
+            int index = bookGrid.SelectedIndex;
+            if(index < 0)
+            {
+                MessageBox.Show("请先选择要删除的记录");
+                return;
+            }
+
+            //建立DataSet对象(相当于建立前台的虚拟数据库)
+            DataSet ds = new DataSet();
+            //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
+            DataTable dtable;
+
+            string sltStr = "select * from book";
+            MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
+            //建立DataAdapter对象  
+            MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
+
+            //拿到 DataGrid的数据
+            dtable = (bookGrid.ItemsSource as DataView).Table;
+            DataRow row = dtable.Rows[index];
+            row.Delete();
+
+            int a = msda.Update(dtable);
+            if(a > 0)
+            {
+                MessageBox.Show("删除成功");
+            }
+        }
     }
 }
