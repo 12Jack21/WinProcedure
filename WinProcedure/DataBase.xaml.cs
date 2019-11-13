@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Linq;
@@ -27,34 +28,48 @@ namespace WinProcedure
             InitializeComponent();
         }
 
-        public DataTable GetData(string Path,string sheet)
+        public DataTable GetData(string Path, string sheet)
         {
-            //连接语句，读取文件路劲
-            string strConn = "Provider=Microsoft.ACE.OLEDB.12.0;" + "Data Source=" + Path + ";" + "Extended Properties=Excel12.0;";      
-            string strExcel = "select * from [" + sheet  +"$]";                                   //查询Excel表名，默认是Sheet1
-            OleDbConnection ole = new OleDbConnection(strConn);
-            //打开连接
-            ole.Open();                                                                                        
-            DataTable schemaTable = new DataTable();
-            OleDbDataAdapter odp = new OleDbDataAdapter(strExcel, strConn);
-            odp.Fill(schemaTable);
-            ole.Close();
-            return schemaTable;
+            DataTable schemaTable = null;
+            OleDbConnection ole = null;
+            try
+            {
+                //连接语句，读取文件路劲
+                string strConn = "Provider=Microsoft.ACE.OLEDB.12.0;" + "Data Source=" + Path + ";" + @"Extended Properties=""Excel 12.0 Xml;HDR=YES""";
+                string strExcel = "select * from [" + sheet + "$]";                                   //查询Excel表名，默认是Sheet1
+                ole = new OleDbConnection(strConn);
+                //打开连接
+                ole.Open();
+                schemaTable = new DataTable();
+                OleDbDataAdapter odp = new OleDbDataAdapter(strExcel, strConn);
+                odp.Fill(schemaTable);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                if(ole != null)
+                    ole.Close();
 
+            }
+                return schemaTable;
         }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            DataTable dt = GetData(@"D:\File\Special\Desktop\WinDemand\hotel.xls","sheet1");
-            if(dt.Rows.Count > 0)
+            DataTable dt = GetData(@"..\..\data\hotel.xls", "Sheet1");
+            if (dt.Rows.Count > 0)
             {
-                List<RoomType> lists = new List<RoomType>();
-                for(int i = 0; i < dt.Rows.Count; i++)
+                ObservableCollection<RoomType> lists = new ObservableCollection<RoomType>();
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     RoomType roomType = new RoomType();
-                    roomType.id = dt.Rows[i][0].ToString();
-                    roomType.name = dt.Rows[i][1].ToString();
-                    roomType.feature = dt.Rows[i][2].ToString();
-                    roomType.state = dt.Rows[i][3].ToString();
+                    roomType.Id = dt.Rows[i][0].ToString();
+                    roomType.Name = dt.Rows[i][1].ToString();
+                    roomType.Feature = dt.Rows[i][2].ToString();
+                    roomType.Price = Convert.ToDouble(dt.Rows[i][3].ToString());
+                    roomType.State = dt.Rows[i][4].ToString();
                     lists.Add(roomType);
                 }
                 roomTypeGrid.ItemsSource = lists;
@@ -65,23 +80,42 @@ namespace WinProcedure
 
         }
 
-        private void showNumBtn_Click(object sender, RoutedEventArgs e)
+        private void showNoBtn_Click(object sender, RoutedEventArgs e)
         {
-            DataRowView row = roomTypeGrid.SelectedItem as DataRowView;
 
-            DataTable dt = GetData(@"D:\File\Special\Desktop\WinDemand\hotel.xls", "sheet2");
+            RoomType roomType = (RoomType)roomTypeGrid.SelectedItem;
+            if (roomType == null)
+            {
+                MessageBox.Show("请先选择一个房型!");
+                return;
+            }
+            DataTable dt = GetData(@"..\..\data\hotel.xls", "Sheet2");
             if (dt.Rows.Count > 0)
             {
-                List<Room> lists = new List<Room>();
+                ObservableCollection<Room> lists = new ObservableCollection<Room>();
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
+                    string roomType_id = dt.Rows[i][0].ToString();
+                    if (!roomType_id.Equals(roomType.Id))
+                        continue;
                     Room room = new Room();
-                    room.id = dt.Rows[i][0].ToString();
-                    room.address = dt.Rows[i][1].ToString();
+                    room.No = dt.Rows[i][1].ToString();
+                    room.Address = dt.Rows[i][2].ToString();
+                    room.State = dt.Rows[i][5].ToString();
                     lists.Add(room);
                 }
-                roomTypeGrid.ItemsSource = lists;
+                roomGrid.ItemsSource = lists;
             }
+        }
+
+        private void RoomGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+
+        }
+
+        private void FindInstanceBtn_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

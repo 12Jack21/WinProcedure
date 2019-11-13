@@ -10,19 +10,79 @@
         <TabControl >
             <TabItem Header="Excel数据管理" Name="excelManage">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="153*"/>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="562*"/>
+                    </Grid.ColumnDefinitions>
 
-                    <DataGrid x:Name="roomTypeGrid" HorizontalAlignment="Left" Height="178" Margin="140,47,0,0" VerticalAlignment="Top" Width="530" SelectionChanged="DataGrid_SelectionChanged"/>
-                    <DataGrid Margin="140,247,124,0"/>
-                    <Button x:Name="showNumBtn" Content="显示房号" HorizontalAlignment="Left" Margin="689,75,0,0" VerticalAlignment="Top" Width="95" Height="40" Click="showNumBtn_Click"/>
+                    <DataGrid x:Name="roomTypeGrid" HorizontalAlignment="Left" Height="178" Margin="140,47,0,0" VerticalAlignment="Top" Width="Auto" SelectionChanged="DataGrid_SelectionChanged" AutoGenerateColumns="False" Grid.ColumnSpan="3" Background="AntiqueWhite">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="房型编号" Binding="{Binding Id}" Width="100"></DataGridTextColumn>
+                            <DataGridTextColumn Header="房型名称" Binding="{Binding Name}" Width="100"></DataGridTextColumn>
+                            <DataGridTextColumn  Header="房型特征" Binding="{Binding Feature}" Width="100"></DataGridTextColumn>
+                            <DataGridTextColumn Header="单价" Binding="{Binding Price}" Width="100"></DataGridTextColumn>
+                            <DataGridTextColumn Header="当前状态" Binding="{Binding State}" Width="80"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid Background="AntiqueWhite" x:Name="roomGrid" Margin="41.2,242,230.4,27.6" AutoGenerateColumns="False" Width="370" Grid.Column="1" Grid.ColumnSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="房号" Binding="{Binding No}" Width="120"></DataGridTextColumn>
+                            <DataGridTextColumn Header="地址" Binding="{Binding Address}" Width="120"></DataGridTextColumn>
+                            <DataGridTextColumn Header="当前状态" Binding="{Binding State}" Width="120"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button x:Name="showNumBtn" Content="显示房号" HorizontalAlignment="Left" Margin="426.1,122,0,0" VerticalAlignment="Top" Width="95" Height="40" Click="showNoBtn_Click" Grid.Column="2"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="MySQL数据管理" Name="sqlManage">
+            <TabItem Header="SQLite数据管理" Name="sqlManage">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="86*"/>
+                        <ColumnDefinition Width="179*"/>
+                    </Grid.ColumnDefinitions>
 
+                    <Button Content="新建" Margin="134.2,10,293.4,376.6" Grid.Column="1"/>
+                    <Button Content="修改" Margin="266.2,10,161.4,376.6" Grid.Column="1"/>
+                    <Button Content="删除" Margin="398.2,10,29.4,376.6" Grid.Column="1"/>
+                    <DataGrid Name="fileGrid"  AutoGenerateColumns="False" Background="Azure" Width="Auto" Margin="117,66,61.4,9.6" Grid.ColumnSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="文件编号" Binding="{Binding No}" Width="120"/>
+                            <DataGridTextColumn Header="文件名称" Binding="{Binding Name}" Width="120"/>
+                            <DataGridTextColumn Header="主题" Binding="{Binding Theme}" Width="120"/>
+                            <DataGridTextColumn Header="发布时间" Binding="{Binding PublishDate}" Width="120"/>
+                            <DataGridTextColumn Header="施行时间" Binding="{Binding CarryDate}" Width="120"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="ADO.NET数据管理" Name="adoMange">
-                <Grid></Grid>
+                <Grid>
+                    <Label Content="MSSQL数据库实例列表" FontSize="15px" HorizontalAlignment="Left" Margin="35,10,0,0" VerticalAlignment="Top"/>
+                    <ComboBox Name="instanceList" HorizontalAlignment="Left" Margin="215,10,0,0" VerticalAlignment="Top" Width="260" Height="29"/>
+                    <DataGrid x:Name="bookGrid" AutoGenerateColumns="False" Margin="41,84,143.4,22.6">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="编号" Binding="{Binding No}" Width="100"/>
+                            <DataGridTextColumn Header="书名" Binding="{Binding Name}" Width="100"/>
+                            <DataGridTextColumn Header="作者姓" Binding="{Binding AuthorSurname}" Width="100"/>
+                            <DataGridTextColumn Header="作者名" Binding="{Binding AuthorName}" Width="100"/>
+                            <DataGridTextColumn Header="出版社" Binding="{Binding Publisher}" Width="100"/>
+                            <DataGridTextColumn Header="单价" Binding="{Binding Price}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Label Content="数据库登陆用户名" FontSize="15px" HorizontalAlignment="Left" Margin="41,44,0,0" VerticalAlignment="Top"/>
+                    <Label Content="数据库连接密码" FontSize="15px" HorizontalAlignment="Left" Margin="360,44,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="username" HorizontalAlignment="Left" Height="23" FontSize="15px" Margin="176,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="172"/>
+                    <TextBox x:Name="password" HorizontalAlignment="Left" Height="23" FontSize="15px" Margin="480,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="139"/>
+                    <Button x:Name="findInstanceBtn" Content="查找数据库实例" FontSize="14px" HorizontalAlignment="Left" Margin="660,51,0,0" VerticalAlignment="Top" Width="124" Height="35" Click="FindInstanceBtn_Click"/>
+                    <Button x:Name="connectBtn" Content="连接测试" FontSize="14px" HorizontalAlignment="Left" Margin="660,91,0,0" VerticalAlignment="Top" Width="124" Height="35"/>
+                    <Button x:Name="dataReaderSelectBtn" Content="DataReader查询" FontSize="14px" HorizontalAlignment="Left" Margin="660,131,0,0" VerticalAlignment="Top" Width="124" Height="35"/>
+                    <Button x:Name="dataAdapterUpdateBtn" Content="DataAdapter查询" FontSize="12px" HorizontalAlignment="Left" Margin="660,171,0,0" VerticalAlignment="Top" Width="124" Height="35"/>
+                    <Button x:Name="dataAdapterBatchUpdateBtn" Content="DataAdapter批量更新" FontSize="12px" HorizontalAlignment="Left" Margin="660,211,0,0" VerticalAlignment="Top" Width="124" Height="35"/>
+                    <Button x:Name="addBtn" Content="新增" FontSize="14px" HorizontalAlignment="Left" Margin="660,251,0,0" VerticalAlignment="Top" Width="124" Height="35"/>
+                    <Button x:Name="deleteBtn" Content="删除" FontSize="14px" HorizontalAlignment="Left" Margin="660,291,0,0" VerticalAlignment="Top" Width="124" Height="35"/>
+                    <Button x:Name="saveBtn" Content="保存" FontSize="14px" HorizontalAlignment="Left" Margin="660,331,0,0" VerticalAlignment="Top" Width="124" Height="35"/>
+                </Grid>
             </TabItem>
         </TabControl>
 

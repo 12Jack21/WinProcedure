@@ -20,19 +20,21 @@ namespace WinProcedure
     }
     public class RoomType
     {
-        public string id { get; set; }
-        public string name { get; set; }
-        public string feature { get; set; }
-        public double price { get; set; }
-        public string state { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Feature { get; set; }
+        public double Price { get; set; }
+        public string State { get; set; }
+
 
     }
     public class Room
     {
         //房号
-        public string id { get; set; }
+        public string No { get; set; }
         //房型编号
-        public string address { get; set; }
+        public string Address { get; set; }
 
+        public string State { get; set; }
     }
 }

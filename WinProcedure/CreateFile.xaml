@@ -1,0 +1,27 @@
+﻿<Window x:Class="WinProcedure.CreateFile"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WinProcedure"
+        mc:Ignorable="d"
+        Title="CreateFile" Height="360.219" Width="578.832">
+    <Grid>
+        <Label Content="文件名称" HorizontalAlignment="Left" FontSize="15px" Margin="52,34,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="fileName" Text="" HorizontalAlignment="Left" Height="29" FontSize="15px" Margin="127,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="142"/>
+        <Label Content="文号" HorizontalAlignment="Left" FontSize="15px" Margin="52,68,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="fileNo" Text="" HorizontalAlignment="Left" Height="29" FontSize="15px" Margin="127,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="142"/>
+        <Label Content="发布时间" HorizontalAlignment="Left" FontSize="15px" Margin="52,102,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="publishTime" Text="" HorizontalAlignment="Left" Height="29" FontSize="15px" Margin="127,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="142"/>
+        <Label Content="发布单位" HorizontalAlignment="Left" FontSize="15px" Margin="315,68,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="publishUnit" Text="" HorizontalAlignment="Left" Height="29" FontSize="15px" Margin="390,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140"/>
+        <Label Content="实施时间" HorizontalAlignment="Left" FontSize="15px" Margin="315,102,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="carryDate" Text="" HorizontalAlignment="Left" Height="29" FontSize="15px" Margin="390,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140"/>
+        <Label Content="摘要" HorizontalAlignment="Left" FontSize="15px" Margin="52,206,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="abstract" Text="" HorizontalAlignment="Left" Height="117" FontSize="15px" Margin="127,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="403"/>
+        <Button x:Name="Confirm" Content="确认" HorizontalAlignment="Left" Margin="328,282,0,0" VerticalAlignment="Top" Width="103" Height="38"/>
+        <Button x:Name="Back" Content="返回" HorizontalAlignment="Left" Margin="447,282,0,0" VerticalAlignment="Top" Width="103" Height="38"/>
+        <Button x:Name="Upload" Content="上传" HorizontalAlignment="Left" Margin="447,11,0,0" VerticalAlignment="Top" Width="103" Height="38"/>
+
+    </Grid>
+</Window>
