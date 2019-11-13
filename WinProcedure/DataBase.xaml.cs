@@ -260,9 +260,10 @@ namespace WinProcedure
         private void FindInstanceBtn_Click(object sender, RoutedEventArgs e)
         {
             MySqlDataReader reader = null;
+            MySqlConnection con = null;
             try
             {
-                con.Open();    //②打开数据库连接
+                con = ConnectDatabase();    //②打开数据库连接
                 cmd = new MySqlCommand("show databases", con); //③使用指定的SQL命令和连接对象创建SqlCommand对象
                 reader = cmd.ExecuteReader(); //④执行Command的ExecuteReader()方法
 
@@ -278,27 +279,30 @@ namespace WinProcedure
                     instanceCombo.Items.Add(dt.Rows[i][0].ToString());
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                MessageBox.Show(ex.Message);
             }
             finally
             {
                 //⑥关闭DataReader 
                 reader.Close();
+                if(con != null)
                 //⑦关闭连接 
-                conn.Close();
+                    conn.Close();
             }
         }
         private MySqlConnection ConnectDatabase()
         {
             String username_ = username.Text;
             string password_ = password.Text;
-            if (String.IsNullOrEmpty(username_) || String.IsNullOrEmpty(password_))
-            {
-                MessageBox.Show("用户名和密码不能为空！");
-                return null;
-            }
+            //if (String.IsNullOrEmpty(username_) || String.IsNullOrEmpty(password_))
+            //{
+            //    MessageBox.Show("用户名和密码不能为空！");
+            //    return null;
+            //}  
+            username_ = "root";
+            password_ = "zaoMENG45.";
             MySqlConnection con = new MySqlConnection();
             con.ConnectionString = "Server=localhost;Database =book;Uid=" + username_ + ";Pwd=" + password_ + ";";
             con.Open();
@@ -316,8 +320,6 @@ namespace WinProcedure
                     return;
                 }
                 con = ConnectDatabase();
-                con.ConnectionString = "Server=localhost;Database =book;Uid=" + username_ + ";Pwd=" + password_ + ";";
-                con.Open();
                 MessageBox.Show("连接MySQL数据库成功！");
             }
             catch (Exception ex)
@@ -364,15 +366,15 @@ namespace WinProcedure
             //建立DataSet对象(相当于建立前台的虚拟数据库)
             DataSet ds = new DataSet();
             //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
-            DataTable dtable;
+            DataTable dtable = new DataTable();
 
-            string sltStr = "select * from book ";
+            string sltStr = "select * from book";
             MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
             //建立DataAdapter对象  
             MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
-            
+
             //拿到 DataGrid的数据
-            dtable = (bookGrid.ItemsSource as DataView).Table;
+            msda.Fill(dtable);
 
             bookGrid.ItemsSource = dtable.DefaultView;
         }
@@ -386,13 +388,21 @@ namespace WinProcedure
             //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
             DataTable dtable;
 
-            string sltStr = "select * from book ";
+            string sltStr = "select * from book";
             MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
             //建立DataAdapter对象  
             MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
 
+            //dtable
+            //DataView dv = bookGrid.Items
             //拿到 DataGrid的数据
-            dtable = (bookGrid.ItemsSource as DataView).Table;
+            dtable = ((DataView)bookGrid.ItemsSource).Table;
+            var item = bookGrid.Items;
+            DataRowView items = bookGrid.Items[0] as DataRowView;
+            DataTable dt = items.DataView.Table;
+
+
+            //msda.Update();
             int a = msda.Update(dtable);
             if(a > 0)
             {

@@ -76,11 +76,12 @@ namespace WinProcedure
         public string AuthorSurname { get; set; }
         public string AuthorName { get; set; }
         public string Publisher { get; set; }
-        public double Price { get; set; }
+        public Double Price { get; set; }
 
+        public static int Count;
         public Book() { }
 
-        public Book(string no, string name, string authorSurname, string authorName, string publisher, double price)
+        public Book(string no, string name, string authorSurname, string authorName, string publisher, Double price)
         {
             No = no;
             Name = name;

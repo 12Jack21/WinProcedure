@@ -86,7 +86,7 @@
                     <Button x:Name="dataAdapterBatchUpdateBtn" Content="DataAdapter批量更新" FontSize="12px" HorizontalAlignment="Left" Margin="521,211,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="dataAdapterBatchUpdateBtn_Click"/>
                     <Button x:Name="addBtn" Content="新增" FontSize="14px" HorizontalAlignment="Left" Margin="521,251,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="addBtn_Click"/>
                     <Button x:Name="deleteBtn" Content="删除" FontSize="14px" HorizontalAlignment="Left" Margin="521,291,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="deleteBtn_Click"/>
-                    <Button x:Name="saveBtn" Content="保存" FontSize="14px" Margin="521,331,10,0" VerticalAlignment="Top" Height="35" Grid.Column="1"/>
+                    <Button x:Name="saveBtn" Content="保存" FontSize="14px" Margin="521,331,0,0" VerticalAlignment="Top" Height="35" Grid.Column="1" HorizontalAlignment="Left" Width="124"/>
                 </Grid>
             </TabItem>
         </TabControl>
