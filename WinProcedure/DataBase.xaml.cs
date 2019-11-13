@@ -120,31 +120,38 @@ namespace WinProcedure
         ObservableCollection<AttachFile> fileList = new ObservableCollection<AttachFile>();
         public void addToList(AttachFile file)
         {
-            fileList.Add(file);
+            AddSQLiteData(file);
+            ShowSQLiteData();
+            //fileList.Add(file);
         }
 
-        SQLiteConnection conn = new SQLiteConnection();
+        SQLiteConnection conn;
+        private int count;
 
         private void ShowSQLiteData()
         {
-            string sql = "Select ID,REPORT_NO,FILE_NAME,FILE_INDEX,UP_TIME,CARRY_TIME from attach_file";
+            count = 0;
+            string sql = "Select ID,REPORT_NO,FILE_NAME,FILE_INDEX,UP_USER,UP_TIME,CARRY_TIME from attach_file";
             SQLiteCommand command = conn.CreateCommand();
             command.CommandText = sql;
 
             SQLiteDataReader reader = command.ExecuteReader();
-
+            fileList.Clear();
             while (reader.Read())
             {
-                string a = reader.GetString(0);
-                string b = reader.GetString(1);
-                AttachFile attachFile = new AttachFile(reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
-                attachFile.ID = reader.GetString(0);
+                AttachFile attachFile = new AttachFile(reader.GetValue(1).ToString(), reader.GetValue(2).ToString(), reader.GetValue(3).ToString(),
+                    reader.GetValue(4).ToString(),reader.GetValue(5).ToString(),reader.GetValue(6).ToString());
+                attachFile.ID =  reader.GetString(0);
+
+                if (Convert.ToInt32(reader.GetString(0)) > count)
+                    count = Convert.ToInt32(reader.GetString(0));
                 fileList.Add(attachFile);
             }
             fileGrid.ItemsSource = fileList;
         }
         private void GetSQLiteData(string path)
         {
+            conn = new SQLiteConnection();
             conn.ConnectionString = @"Data Source=" + path;
             conn.Open();
         }
@@ -152,9 +159,27 @@ namespace WinProcedure
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
-            string sql = "Insert Into attach_file(ID,REPORT_NO,FILE_NAME,FILE_INDEX,UP_TIME,CARRY_TIME from attach_file) Values(" + Guid.NewGuid() + ",";
-            sql += file.No + "," + file.Name + "," + file.Theme + "," + file.PublishTime + "," + file.CarryTime + ')';
+            string sql = String.Format("Insert Into attach_file(ID,REPORT_NO,FILE_NAME,FILE_INDEX,UP_TIME,CARRY_TIME) Values(@0,@1,@2,@3,@4,@5)");
             cmd.CommandText = sql;
+            SQLiteParameter parameter = new SQLiteParameter("@0");
+            parameter.Value = (AttachFile.Count++).ToString();
+            cmd.Parameters.Add(parameter);
+            parameter = new SQLiteParameter("@1");
+            parameter.Value = file.No;
+            cmd.Parameters.Add(parameter);
+            parameter = new SQLiteParameter("@2");
+            parameter.Value = file.Name;
+            cmd.Parameters.Add(parameter);
+            parameter = new SQLiteParameter("@3");
+            parameter.Value = file.Theme;
+            cmd.Parameters.Add(parameter);
+            parameter = new SQLiteParameter("@4");
+            parameter.Value = file.PublishTime;
+            cmd.Parameters.Add(parameter);
+            parameter = new SQLiteParameter("@5");
+            parameter.Value = file.CarryTime;
+            cmd.Parameters.Add(parameter);
+
             int tag = cmd.ExecuteNonQuery();
             if(tag >= 1)
             {
@@ -174,12 +199,15 @@ namespace WinProcedure
                 MessageBox.Show("修改成功");
             }
         }
-        private void DeleteSQLiteData(string guid)
+        private void DeleteSQLiteData(string ID)
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
-            string sql = "Delete From attach_file Where ID ="+guid;
+            string sql = "Delete From attach_file Where ID=@0";
             cmd.CommandText = sql;
+            SQLiteParameter parameter = new SQLiteParameter("@0");
+            parameter.Value = ID;
+            cmd.Parameters.Add(parameter);
             int tag = cmd.ExecuteNonQuery();
             if (tag >= 1)
             {
@@ -188,20 +216,40 @@ namespace WinProcedure
         }
         private void createBtn_Click(object sender, RoutedEventArgs e)
         {
-            //GetSQLiteData("../../data/demo.db");
-
             CreateFile create = new CreateFile();
             create.database = this;
 
             create.Show();
-
         }
 
+        private void modifyBtn_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
+        private void deleteBtn__Click(object sender, RoutedEventArgs e)
+        {
+            object selected = fileGrid.SelectedItem;
+            if(selected == null)
+            {
+                MessageBox.Show("请先选择删除的记录！");
+                return;
+            }
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("确定删除?", "删除确认", System.Windows.MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                DeleteSQLiteData((selected as AttachFile).ID);
+                ShowSQLiteData();
+            }
+        }
+
+        //更新数据表
+        private void flashBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ShowSQLiteData();
+        }
         private void FindInstanceBtn_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
     }
 }

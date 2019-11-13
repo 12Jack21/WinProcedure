@@ -43,8 +43,8 @@
                     </Grid.ColumnDefinitions>
 
                     <Button x:Name="createBtn" Content="新建" Margin="134.2,10,293.4,376.6" Grid.Column="1" Click="createBtn_Click"/>
-                    <Button x:Name="modifyBtn" Content="修改" Margin="266.2,10,161.4,376.6" Grid.Column="1"/>
-                    <Button x:Name="deleteBtn_" Content="删除" Margin="398.2,10,29.4,376.6" Grid.Column="1"/>
+                    <Button x:Name="modifyBtn" Content="修改" Margin="266.2,10,161.4,376.6" Grid.Column="1" Click="modifyBtn_Click"/>
+                    <Button x:Name="deleteBtn_" Content="删除" Margin="398.2,10,29.4,376.6" Grid.Column="1" Click="deleteBtn__Click"/>
                     <DataGrid Name="fileGrid"  AutoGenerateColumns="False" Background="Azure" Width="Auto" Margin="117,66,61.4,9.6" Grid.ColumnSpan="2">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="文件编号" Binding="{Binding No}" Width="120"/>
@@ -54,6 +54,7 @@
                             <DataGridTextColumn Header="施行时间" Binding="{Binding CarryTime}" Width="120"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Button x:Name="flashBtn" Content="更新" Margin="0.5,10,428,377" Grid.Column="1" Click="flashBtn_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="ADO.NET数据管理" Name="adoMange">
