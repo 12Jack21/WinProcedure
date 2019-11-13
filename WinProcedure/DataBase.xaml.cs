@@ -136,7 +136,7 @@ namespace WinProcedure
             while (reader.Read())
             {
                 string a = reader.GetString(0);
-                string b = reader.GetString(1);
+                String b = reader.GetValue(1).ToString();
                 AttachFile attachFile = new AttachFile(reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
                 attachFile.ID = reader.GetString(0);
                 fileList.Add(attachFile);
