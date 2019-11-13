@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -51,11 +52,11 @@ namespace WinProcedure
             }
             finally
             {
-                if(ole != null)
+                if (ole != null)
                     ole.Close();
 
             }
-                return schemaTable;
+            return schemaTable;
         }
         private void showNoBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -140,8 +141,8 @@ namespace WinProcedure
             while (reader.Read())
             {
                 AttachFile attachFile = new AttachFile(reader.GetValue(1).ToString(), reader.GetValue(2).ToString(), reader.GetValue(3).ToString(),
-                    reader.GetValue(4).ToString(),reader.GetValue(5).ToString(),reader.GetValue(6).ToString());
-                attachFile.ID =  reader.GetString(0);
+                    reader.GetValue(4).ToString(), reader.GetValue(5).ToString(), reader.GetValue(6).ToString());
+                attachFile.ID = reader.GetString(0);
 
                 if (Convert.ToInt32(reader.GetString(0)) > count)
                     count = Convert.ToInt32(reader.GetString(0));
@@ -181,16 +182,17 @@ namespace WinProcedure
             cmd.Parameters.Add(parameter);
 
             int tag = cmd.ExecuteNonQuery();
-            if(tag >= 1)
+            if (tag >= 1)
             {
                 MessageBox.Show("新增成功");
             }
         }
+        //TODO 修改窗体
         private void ModifySQLiteData(AttachFile file)
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
-            string sql = "Update attach_file Set REPORT_NO =" + file.No + "," + "FILE_NAME=" + file.Name + "," + "FILE_INDEX=" + 
+            string sql = "Update attach_file Set REPORT_NO =" + file.No + "," + "FILE_NAME=" + file.Name + "," + "FILE_INDEX=" +
                 file.Theme + "UP_TIME=" + file.PublishTime + "CARRY_TIME=" + file.CarryTime;
             cmd.CommandText = sql;
             int tag = cmd.ExecuteNonQuery();
@@ -229,7 +231,7 @@ namespace WinProcedure
         private void deleteBtn__Click(object sender, RoutedEventArgs e)
         {
             object selected = fileGrid.SelectedItem;
-            if(selected == null)
+            if (selected == null)
             {
                 MessageBox.Show("请先选择删除的记录！");
                 return;
@@ -247,9 +249,125 @@ namespace WinProcedure
         {
             ShowSQLiteData();
         }
+
+        /* ADO.NET 访问MySQL */
+
+        //创建command对象	 
+        private MySqlCommand cmd = null;
+        //创建connection连接对象
+        private MySqlConnection con = null;
+
         private void FindInstanceBtn_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void connectBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                String username_ = username.Text;
+                string password_ = password.Text;
+                if(String.IsNullOrEmpty(username_) || String.IsNullOrEmpty(password_)){
+                    MessageBox.Show("用户名和密码不能为空！");
+                    return;
+                }
+                con.ConnectionString = "Server=localhost;Database =book;Uid=" + username_ + ";Pwd=" + password_ + ";";
+                con.Open();
+                MessageBox.Show("连接MySQL数据库成功！");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void dataReaderSelectBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MySqlDataReader reader = null;
+            try
+            {
+                con.Open();    //②打开数据库连接
+                cmd = new MySqlCommand("select * from book", con); //③使用指定的SQL命令和连接对象创建SqlCommand对象
+                reader = cmd.ExecuteReader(); //④执行Command的ExecuteReader()方法
+
+                //⑤将DataReader绑定到数据控件中 
+                DataTable dt = new DataTable();
+                dt.Load(reader);
+                bookGrid.ItemsSource = dt.DefaultView;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                //⑥关闭DataReader 
+                reader.Close();
+                //⑦关闭连接 
+                conn.Close();
+            }
+        }
+
+        private void dataAdapterUpdateBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //建立DataSet对象(相当于建立前台的虚拟数据库)
+            DataSet ds = new DataSet();
+            //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
+            DataTable dtable;
+            //建立DataRowCollection对象(相当于表的行的集合)
+            DataRowCollection coldrow;
+            //建立DataRow对象(相当于表的列的集合)
+            DataRow drow;
+
+            string sltStr = "select * from book ";
+            MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
+            //建立DataAdapter对象  
+            MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
+
+            //将查询的结果存到虚拟数据库ds中的虚拟表tabuser中
+            msda.Fill(ds, "book");
+
+            //将数据表tabuser的数据复制到DataTable对象（取数据）
+            dtable = ds.Tables["book"];
+
+            //用DataRowCollection对象获取这个数据表的所有数据行
+            coldrow = dtable.Rows;
+
+            //逐行遍历，取出各行的数据
+            //for (int inti = 0; inti < coldrow.Count; inti++)
+            //{
+            //    drow = coldrow[inti];
+
+            //}
+
+            bookGrid.ItemsSource = dtable.DefaultView;
+        }
+
+        //批量更新
+        private void dataAdapterBatchUpdateBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //建立DataSet对象(相当于建立前台的虚拟数据库)
+            DataSet ds = new DataSet();
+            //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
+            DataTable dtable;
+            //建立DataRowCollection对象(相当于表的行的集合)
+            DataRowCollection coldrow;
+            //建立DataRow对象(相当于表的列的集合)
+            DataRow drow;
+
+            string sltStr = "select * from book ";
+            MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
+            //建立DataAdapter对象  
+            MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
+
+            //将查询的结果存到虚拟数据库ds中的虚拟表tabuser中
+            msda.Fill(ds, "book");
+
+            //将数据表tabuser的数据复制到DataTable对象（取数据）
+            dtable = ds.Tables["book"];
+
+            msda.Update(dtable);
         }
     }
 }
