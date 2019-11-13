@@ -12,16 +12,16 @@
         <Label Content="文号" HorizontalAlignment="Left" FontSize="15px" Margin="52,68,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="fileNo" Text="" HorizontalAlignment="Left" Height="29" FontSize="15px" Margin="127,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="142"/>
         <Label Content="发布时间" HorizontalAlignment="Left" FontSize="15px" Margin="52,102,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="publishTime" Text="" HorizontalAlignment="Left" Height="29" FontSize="15px" Margin="127,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="142"/>
+        <DatePicker Name="publishTime" HorizontalAlignment="Left" Margin="127,106,0,0" VerticalAlignment="Top" Height="25" Width="142"/>
         <Label Content="发布单位" HorizontalAlignment="Left" FontSize="15px" Margin="315,68,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="publishUnit" Text="" HorizontalAlignment="Left" Height="29" FontSize="15px" Margin="390,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140"/>
         <Label Content="实施时间" HorizontalAlignment="Left" FontSize="15px" Margin="315,102,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="carryDate" Text="" HorizontalAlignment="Left" Height="29" FontSize="15px" Margin="390,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140"/>
+        <DatePicker Name="carryTime" HorizontalAlignment="Left" Margin="390,106,0,0" VerticalAlignment="Top" Height="25" Width="140"/>
         <Label Content="摘要" HorizontalAlignment="Left" FontSize="15px" Margin="52,206,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="abstract" Text="" HorizontalAlignment="Left" Height="117" FontSize="15px" Margin="127,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="403"/>
-        <Button x:Name="Confirm" Content="确认" HorizontalAlignment="Left" Margin="328,282,0,0" VerticalAlignment="Top" Width="103" Height="38"/>
-        <Button x:Name="Back" Content="返回" HorizontalAlignment="Left" Margin="447,282,0,0" VerticalAlignment="Top" Width="103" Height="38"/>
-        <Button x:Name="Upload" Content="上传" HorizontalAlignment="Left" Margin="447,11,0,0" VerticalAlignment="Top" Width="103" Height="38"/>
+        <Button x:Name="Confirm" Content="确认" HorizontalAlignment="Left" Margin="328,282,0,0" VerticalAlignment="Top" Width="103" Height="38" Click="Confirm_Click"/>
+        <Button x:Name="Back" Content="返回" HorizontalAlignment="Left" Margin="447,282,0,0" VerticalAlignment="Top" Width="103" Height="38" Click="Back_Click"/>
+        <Button x:Name="Upload" Content="上传" HorizontalAlignment="Left" Margin="315,34,0,0" VerticalAlignment="Top" Width="116" Height="30" Click="Upload_Click"/>
 
     </Grid>
 </Window>

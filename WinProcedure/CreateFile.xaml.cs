@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Forms = System.Windows.Forms;
 
 namespace WinProcedure
 {
@@ -22,6 +24,36 @@ namespace WinProcedure
         public CreateFile()
         {
             InitializeComponent();
+        }
+        public DataBase database { get; set; }
+
+        private void Upload_Click(object sender, RoutedEventArgs e)
+        {
+            Forms.OpenFileDialog fileDialog = new Forms.OpenFileDialog();
+            string filepath = null;
+            if( fileDialog.ShowDialog() == Forms.DialogResult.OK)
+            {
+                filepath = fileDialog.FileName;
+                if (File.Exists(filepath))
+                {
+                    FileInfo fileInfo = new FileInfo(filepath);
+                    fileName.Text = fileInfo.Name;                   
+                }
+            }
+            fileDialog.Dispose();
+        }
+
+        private void Confirm_Click(object sender, RoutedEventArgs e)
+        {
+            AttachFile file = new AttachFile(fileNo.Text, fileName.Text, publishTime.DisplayDate.Date.ToShortDateString(), carryTime.DisplayDate.Date.ToShortDateString());
+            database.addToList(file);
+            MessageBox.Show("新增成功");
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+          
+            this.Close();
         }
     }
 }
