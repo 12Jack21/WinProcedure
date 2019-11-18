@@ -155,11 +155,12 @@ namespace WinProcedure
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
-            string sql = String.Format("Insert Into tbl_fgwj(ID_KEY,FILE_NO,FILE_NAME,SUBJECT,PUBLISH_DATE,IMPLEMENT_DATE) Values(@0,@1,@2,@3,@4,@5)");
+            string sql = String.Format("Insert Into tbl_fgwj(ID_KEY,FILE_NO,FILE_NAME,SUBJECT,PUBLISH_DATE,IMPLEMENT_DATE,ABSTRACT) Values(@0,@1,@2,@3,@4,@5,@6)");
             cmd.CommandText = sql;
             SQLiteParameter parameter = new SQLiteParameter("@0");
 
-            parameter.Value = (++AttachFile.Count).ToString();
+            // 利用当天日期加当前的时间拼凑出一个字符串作为唯一的 ID_KEY
+            parameter.Value = DateTime.Now.ToString("yyyyMMddHHmmssffff"); ;
 
             cmd.Parameters.Add(parameter);
             parameter = new SQLiteParameter("@1");
@@ -177,7 +178,9 @@ namespace WinProcedure
             parameter = new SQLiteParameter("@5");
             parameter.Value = file.CarryTime;
             cmd.Parameters.Add(parameter);
-
+            parameter = new SQLiteParameter("@6");
+            parameter.Value = file.Abstract;
+            cmd.Parameters.Add(parameter);
             int tag = cmd.ExecuteNonQuery();
             if (tag >= 1)
             {
@@ -189,8 +192,21 @@ namespace WinProcedure
         {
             SQLiteCommand cmd = conn.CreateCommand();
             //TODO 根据空值来判断要不要更新
-            string sql = "Update tbl_fgwj Set FILE_NO =" + "\"" + file.No + "\"" + "," + "FILE_NAME=" + "\""+file.Name +"\""+ "," + "SUBJECT=" +
-                file.Theme + ",PUBLISH_DATE=" + file.PublishTime + ",IMPLEMENT_DATE=" + file.CarryTime + " WHERE ID_KEY=" +"\""+ file.ID +"\"";
+            string sql = "Update tbl_fgwj Set ";
+            if (!String.IsNullOrEmpty(file.No))
+                sql += "FILE_NO =" + "\"" + file.No + "\"" + ",";
+            if (!String.IsNullOrEmpty(file.Name))
+                sql += "FILE_NAME=" + "\"" + file.Name + "\"" + ",";
+            if (!String.IsNullOrEmpty(file.Theme))
+                sql += "SUBJECT=" + "\"" + file.Theme + "\" ,";
+            if (!String.IsNullOrEmpty(file.PublishTime))
+                sql += "PUBLISH_DATE=" +"\""+ file.PublishTime + "\" ,";
+            if (!String.IsNullOrEmpty(file.CarryTime))
+                sql += "IMPLEMENT_DATE=" + "\"" +file.CarryTime +"\"";
+            if (sql.EndsWith(","))
+                sql = sql.Substring(0, sql.Length - 1);
+            sql += " WHERE ID_KEY=" +"\""+ file.ID +"\"";
+
             cmd.CommandText = sql;
             int tag = cmd.ExecuteNonQuery();
             if (tag >= 1)
@@ -275,11 +291,11 @@ namespace WinProcedure
             MySqlConnection con = null;
             try
             {
-                con = ConnectDatabase();    //②打开数据库连接
-                cmd = new MySqlCommand("show databases", con); //③使用指定的SQL命令和连接对象创建SqlCommand对象
-                reader = cmd.ExecuteReader(); //④执行Command的ExecuteReader()方法
+                con = ConnectDatabase();    //打开数据库连接
+                cmd = new MySqlCommand("show databases", con); //使用指定的SQL命令和连接对象创建SqlCommand对象
+                reader = cmd.ExecuteReader(); //执行Command的ExecuteReader()方法
 
-                //⑤将DataReader绑定到数据控件中 
+                //将DataReader绑定到数据控件中 
                 DataTable dt = new DataTable();
                 dt.Load(reader);
 
@@ -298,10 +314,10 @@ namespace WinProcedure
             finally
             {
                 if (reader != null)
-                    //⑥关闭DataReader 
+                    //关闭DataReader 
                     reader.Close();
                 if (con != null)
-                    //⑦关闭连接 
+                    //关闭连接 
                     conn.Close();
             }
         }
@@ -314,8 +330,8 @@ namespace WinProcedure
             //    MessageBox.Show("用户名和密码不能为空！");
             //    return null;
             //}  
-            username_ = "root";
-            password_ = "zaoMENG45.";
+            //username_ = "root";
+            //password_ = "zaoMENG45.";
             MySqlConnection con = new MySqlConnection();
             con.ConnectionString = "Server=localhost;Database =book;Uid=" + username_ + ";Pwd=" + password_ + ";";
             con.Open();
@@ -352,11 +368,11 @@ namespace WinProcedure
             MySqlConnection con = null;
             try
             {
-                con = ConnectDatabase();    //②打开数据库连接
-                cmd = new MySqlCommand("select * from book", con); //③使用指定的SQL命令和连接对象创建SqlCommand对象
-                reader = cmd.ExecuteReader(); //④执行Command的ExecuteReader()方法
+                con = ConnectDatabase();    //打开数据库连接
+                cmd = new MySqlCommand("select * from book", con); //使用指定的SQL命令和连接对象创建SqlCommand对象
+                reader = cmd.ExecuteReader(); //执行Command的ExecuteReader()方法
 
-                //⑤将DataReader绑定到数据控件中 
+                //将DataReader绑定到数据控件中 
                 DataTable dt = new DataTable();
                 dt.Load(reader);
                 bookGrid.ItemsSource = dt.DefaultView;
@@ -367,9 +383,9 @@ namespace WinProcedure
             }
             finally
             {
-                //⑥关闭DataReader 
+                //关闭DataReader 
                 reader.Close();
-                //⑦关闭连接 
+                //关闭连接 
                 conn.Close();
             }
         }

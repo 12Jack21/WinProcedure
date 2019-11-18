@@ -18,7 +18,7 @@
         <Label Content="实施时间" HorizontalAlignment="Left" FontSize="15px" Margin="315,102,0,0" VerticalAlignment="Top"/>
         <DatePicker Name="carryTime" HorizontalAlignment="Left" Margin="390,106,0,0" VerticalAlignment="Top" Height="25" Width="140"/>
         <Label Content="摘要" HorizontalAlignment="Left" FontSize="15px" Margin="52,206,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="abstract" Text="" HorizontalAlignment="Left" Height="117" FontSize="15px" Margin="127,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="403"/>
+        <TextBox x:Name="Abstract" Text="" HorizontalAlignment="Left" Height="117" FontSize="15px" Margin="127,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="403"/>
         <Button x:Name="Confirm" Content="确认" HorizontalAlignment="Left" Margin="328,282,0,0" VerticalAlignment="Top" Width="103" Height="38" Click="Confirm_Click"/>
         <Button x:Name="Back" Content="返回" HorizontalAlignment="Left" Margin="447,282,0,0" VerticalAlignment="Top" Width="103" Height="38" Click="Back_Click"/>
         <Button x:Name="Upload" Content="上传" HorizontalAlignment="Left" Margin="315,34,0,0" VerticalAlignment="Top" Width="116" Height="30" Click="Upload_Click"/>

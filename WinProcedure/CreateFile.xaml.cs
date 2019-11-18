@@ -45,7 +45,7 @@ namespace WinProcedure
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            AttachFile file = new AttachFile(fileNo.Text, fileName.Text, publishUnit.Text,publishTime.DisplayDate.Date.ToShortDateString(), carryTime.DisplayDate.Date.ToShortDateString());
+            AttachFile file = new AttachFile(fileNo.Text, fileName.Text, publishUnit.Text,publishTime.DisplayDate.Date.ToShortDateString(), carryTime.DisplayDate.Date.ToShortDateString(),Abstract.Text);
             database.addToList(file);
         }
 
