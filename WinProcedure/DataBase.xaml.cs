@@ -76,7 +76,7 @@ namespace WinProcedure
                     string roomType_id = dt.Rows[i][0].ToString();
                     if (!roomType_id.Equals(roomType.Id))
                         continue;
-                    Room room = new Room(roomType_id, dt.Rows[i][1].ToString(), dt.Rows[i][2].ToString(), dt.Rows[i][3].ToString(),Convert.ToDouble( dt.Rows[i][4].ToString()), dt.Rows[i][5].ToString());
+                    Room room = new Room(roomType_id, dt.Rows[i][1].ToString(), dt.Rows[i][2].ToString(), dt.Rows[i][3].ToString(), Convert.ToDouble(dt.Rows[i][4].ToString()), dt.Rows[i][5].ToString());
                     lists.Add(room);
                 }
                 roomGrid.ItemsSource = lists;
@@ -129,7 +129,7 @@ namespace WinProcedure
         private void ShowSQLiteData()
         {
             count = 0;
-            string sql = "Select ID,REPORT_NO,FILE_NAME,FILE_INDEX,UP_USER,UP_TIME,CARRY_TIME from attach_file";
+            string sql = "Select ID_KEY,FILE_NO,FILE_NAME,SUBJECT,PUBLISH_ORG,PUBLISH_DATE,IMPLEMENT_DATE from tbl_fgwj";
             SQLiteCommand command = conn.CreateCommand();
             command.CommandText = sql;
 
@@ -141,8 +141,6 @@ namespace WinProcedure
                     reader.GetValue(4).ToString(), reader.GetValue(5).ToString(), reader.GetValue(6).ToString());
                 attachFile.ID = reader.GetString(0);
 
-                if (Convert.ToInt32(reader.GetString(0)) > count)
-                    count = Convert.ToInt32(reader.GetString(0));
                 fileList.Add(attachFile);
             }
             fileGrid.ItemsSource = fileList;
@@ -157,10 +155,12 @@ namespace WinProcedure
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
-            string sql = String.Format("Insert Into attach_file(ID,REPORT_NO,FILE_NAME,FILE_INDEX,UP_TIME,CARRY_TIME) Values(@0,@1,@2,@3,@4,@5)");
+            string sql = String.Format("Insert Into tbl_fgwj(ID_KEY,FILE_NO,FILE_NAME,SUBJECT,PUBLISH_DATE,IMPLEMENT_DATE) Values(@0,@1,@2,@3,@4,@5)");
             cmd.CommandText = sql;
             SQLiteParameter parameter = new SQLiteParameter("@0");
+
             parameter.Value = (++AttachFile.Count).ToString();
+
             cmd.Parameters.Add(parameter);
             parameter = new SQLiteParameter("@1");
             parameter.Value = file.No;
@@ -184,13 +184,13 @@ namespace WinProcedure
                 MessageBox.Show("新增成功");
             }
         }
-        //TODO 修改窗体
+        //修改窗体
         private void ModifySQLiteData(AttachFile file)
         {
             SQLiteCommand cmd = conn.CreateCommand();
-
-            string sql = "Update attach_file Set REPORT_NO =" + file.No + "," + "FILE_NAME=" + file.Name + "," + "FILE_INDEX=" +
-                file.Theme + "UP_TIME=" + file.PublishTime + "CARRY_TIME=" + file.CarryTime;
+            //TODO 根据空值来判断要不要更新
+            string sql = "Update tbl_fgwj Set FILE_NO =" + "\"" + file.No + "\"" + "," + "FILE_NAME=" + "\""+file.Name +"\""+ "," + "SUBJECT=" +
+                file.Theme + ",PUBLISH_DATE=" + file.PublishTime + ",IMPLEMENT_DATE=" + file.CarryTime + " WHERE ID_KEY=" +"\""+ file.ID +"\"";
             cmd.CommandText = sql;
             int tag = cmd.ExecuteNonQuery();
             if (tag >= 1)
@@ -202,7 +202,7 @@ namespace WinProcedure
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
-            string sql = "Delete From attach_file Where ID=@0";
+            string sql = "Delete From tbl_fgwj Where ID_KEY=@0";
             cmd.CommandText = sql;
             SQLiteParameter parameter = new SQLiteParameter("@0");
             parameter.Value = ID;
@@ -223,7 +223,22 @@ namespace WinProcedure
 
         private void modifyBtn_Click(object sender, RoutedEventArgs e)
         {
+            int index = fileGrid.SelectedIndex;
+            if (index < 0)
+            {
+                MessageBox.Show("请先选择要修改的记录！");
+                return;
+            }
+            else
+            {
+                var selected = fileGrid.SelectedItem as DataRowView;
+                DataGridRow row = (DataGridRow)fileGrid.ItemContainerGenerator.ContainerFromIndex(index);
+                var file = row.Item;
+                //AttachFile file = new AttachFile(selected.Row[0].ToString(), selected.Row[1].ToString(), selected.Row[2].ToString(), null,
+                //    selected.Row[3].ToString(), selected.Row[4].ToString());
 
+                ModifySQLiteData(file as AttachFile);
+            }
         }
         private void deleteBtn__Click(object sender, RoutedEventArgs e)
         {
@@ -267,9 +282,9 @@ namespace WinProcedure
                 //⑤将DataReader绑定到数据控件中 
                 DataTable dt = new DataTable();
                 dt.Load(reader);
-                
+
                 //添加进入 Combo中
-                for(int i = 0; i < dt.Rows.Count; i++)
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     String b = dt.Rows[i].ToString();
                     String a = dt.Rows[i][0].ToString();
@@ -282,11 +297,11 @@ namespace WinProcedure
             }
             finally
             {
-                if(reader != null)
-                //⑥关闭DataReader 
+                if (reader != null)
+                    //⑥关闭DataReader 
                     reader.Close();
-                if(con != null)
-                //⑦关闭连接 
+                if (con != null)
+                    //⑦关闭连接 
                     conn.Close();
             }
         }
@@ -313,7 +328,8 @@ namespace WinProcedure
             {
                 String username_ = username.Text;
                 string password_ = password.Password;
-                if(String.IsNullOrEmpty(username_) || String.IsNullOrEmpty(password_)){
+                if (String.IsNullOrEmpty(username_) || String.IsNullOrEmpty(password_))
+                {
                     MessageBox.Show("用户名和密码不能为空！");
                     return;
                 }
@@ -402,7 +418,7 @@ namespace WinProcedure
 
             //msda.Update();
             int a = msda.Update(dtable);
-            if(a > 0)
+            if (a > 0)
             {
                 MessageBox.Show("批量更新成功！");
             }
@@ -434,7 +450,7 @@ namespace WinProcedure
         {
             MySqlConnection con = ConnectDatabase();
             int index = bookGrid.SelectedIndex;
-            if(index < 0)
+            if (index < 0)
             {
                 MessageBox.Show("请先选择要删除的记录");
                 return;
@@ -456,7 +472,7 @@ namespace WinProcedure
             row.Delete();
 
             int a = msda.Update(dtable);
-            if(a > 0)
+            if (a > 0)
             {
                 MessageBox.Show("删除成功");
             }
