@@ -63,9 +63,9 @@
                         <ColumnDefinition Width="139*"/>
                         <ColumnDefinition Width="655*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="MSSQL数据库实例列表" FontSize="15px" HorizontalAlignment="Left" Margin="35,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                    <Label Content="MySQL数据库实例列表" FontSize="15px" HorizontalAlignment="Left" Margin="35,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                     <ComboBox Name="instanceCombo" HorizontalAlignment="Left" Margin="76,10,0,0" VerticalAlignment="Top" Width="260" Height="29" Grid.Column="1"/>
-                    <DataGrid x:Name="bookGrid" AutoGenerateColumns="False" Margin="41,84,143,23" Background="DarkGray" Grid.ColumnSpan="2">
+                    <DataGrid x:Name="bookGrid" AutoGenerateColumns="False" Margin="35,84,155,23" Background="DarkGray" Grid.ColumnSpan="2">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="编号" Binding="{Binding No}" Width="100"/>
                             <DataGridTextColumn Header="书名" Binding="{Binding Name}" Width="100"/>
@@ -86,7 +86,7 @@
                     <Button x:Name="dataAdapterBatchUpdateBtn" Content="DataAdapter批量更新" FontSize="12px" HorizontalAlignment="Left" Margin="521,211,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="dataAdapterBatchUpdateBtn_Click"/>
                     <Button x:Name="addBtn" Content="新增" FontSize="14px" HorizontalAlignment="Left" Margin="521,251,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="addBtn_Click"/>
                     <Button x:Name="deleteBtn" Content="删除" FontSize="14px" HorizontalAlignment="Left" Margin="521,291,0,0" VerticalAlignment="Top" Width="124" Height="35" Grid.Column="1" Click="deleteBtn_Click"/>
-                    <Button x:Name="saveBtn" Content="保存" FontSize="14px" Margin="521,331,0,0" VerticalAlignment="Top" Height="35" Grid.Column="1" HorizontalAlignment="Left" Width="124"/>
+                    <Button x:Name="saveBtn" Content="保存" FontSize="14px" Margin="521,331,0,0" VerticalAlignment="Top" Height="35" Grid.Column="1" HorizontalAlignment="Left" Width="124" Click="saveBtn_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>

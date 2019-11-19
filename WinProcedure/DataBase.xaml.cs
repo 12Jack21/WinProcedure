@@ -254,8 +254,7 @@ namespace WinProcedure
 
         //创建command对象	 
         private MySqlCommand cmd = null;
-        //创建connection连接对象
-        private MySqlConnection con = null;
+
 
         private void FindInstanceBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -278,6 +277,7 @@ namespace WinProcedure
                     String a = dt.Rows[i][0].ToString();
                     instanceCombo.Items.Add(dt.Rows[i][0].ToString());
                 }
+                MessageBox.Show("查找数据库实例成功");
             }
             catch (Exception ex)
             {
@@ -285,8 +285,9 @@ namespace WinProcedure
             }
             finally
             {
+                if(reader != null)
                 //⑥关闭DataReader 
-                reader.Close();
+                    reader.Close();
                 if(con != null)
                 //⑦关闭连接 
                     conn.Close();
@@ -328,7 +329,8 @@ namespace WinProcedure
             }
             finally
             {
-                con.Close();
+                if(con != null)
+                    con.Close();
             }
         }
 
@@ -353,10 +355,12 @@ namespace WinProcedure
             }
             finally
             {
+                if(reader != null)
                 //⑥关闭DataReader 
-                reader.Close();
+                    reader.Close();
+                if(con != null)
                 //⑦关闭连接 
-                conn.Close();
+                    con.Close();
             }
         }
 
@@ -393,16 +397,14 @@ namespace WinProcedure
             //建立DataAdapter对象  
             MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
 
-            //dtable
-            //DataView dv = bookGrid.Items
             //拿到 DataGrid的数据
             dtable = ((DataView)bookGrid.ItemsSource).Table;
             var item = bookGrid.Items;
-            DataRowView items = bookGrid.Items[0] as DataRowView;
-            DataTable dt = items.DataView.Table;
+            //DataRowView item = bookGrid.Items[0] as DataRowView;
+            //DataTable dt = item.DataView.Table;
 
+            MySqlCommandBuilder mb = new MySqlCommandBuilder(msda);
 
-            //msda.Update();
             int a = msda.Update(dtable);
             if(a > 0)
             {
@@ -457,10 +459,36 @@ namespace WinProcedure
             DataRow row = dtable.Rows[index];
             row.Delete();
 
+            MySqlCommandBuilder mb = new MySqlCommandBuilder(msda);
             int a = msda.Update(dtable);
             if(a > 0)
             {
                 MessageBox.Show("删除成功");
+            }
+        }
+
+        private void saveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MySqlConnection con = ConnectDatabase();
+
+            //建立DataSet对象(相当于建立前台的虚拟数据库)
+            DataSet ds = new DataSet();
+            //建立DataTable对象(相当于建立前台的虚拟数据库中的数据表)
+            DataTable dtable;
+
+            string sltStr = "select * from book";
+            MySqlCommand sqlCmd = new MySqlCommand(sltStr, con);
+            //建立DataAdapter对象  
+            MySqlDataAdapter msda = new MySqlDataAdapter(sqlCmd);
+
+            //拿到 DataGrid的数据
+            dtable = (bookGrid.ItemsSource as DataView).Table;
+
+            MySqlCommandBuilder mb = new MySqlCommandBuilder(msda);
+            int a = msda.Update(dtable);
+            if (a > 0)
+            {
+                MessageBox.Show("保存成功");
             }
         }
     }
