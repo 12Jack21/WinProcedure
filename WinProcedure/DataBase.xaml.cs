@@ -120,8 +120,6 @@ namespace WinProcedure
             //fileList.Add(file);
         }
 
-        SQLiteConnection conn;
-
         private void ShowSQLiteData()
         {
             SQLiteConnection conn = null;
@@ -383,7 +381,7 @@ namespace WinProcedure
                     reader.Close();
                 if (con != null)
                     //关闭连接 
-                    conn.Close();
+                    con.Close();
             }
         }
         private MySqlConnection ConnectDatabase()
