@@ -30,12 +30,26 @@ namespace WinProcedure
     }
     public class Room
     {
+        public string Id { get; set; }
         //房号
         public string No { get; set; }
         //房型编号
         public string Address { get; set; }
 
+        public string Feature { get; set; }
+        public Double Price { get; set; }
         public string State { get; set; }
+
+        public Room() { }
+        public Room(string id, string no, string address, string feature, Double price, string state)
+        {
+            Id = id;
+            No = no;
+            Address = address;
+            Feature = feature;
+            Price = price;
+            State = state;
+        }
     }
 
     public class AttachFile
@@ -47,6 +61,7 @@ namespace WinProcedure
         public string PublishUser { get; set; }
         public string PublishTime { get; set; }
         public string CarryTime { get; set; }
+        public string Abstract { get; set; }
 
         public AttachFile() { }
         public static int Count;
@@ -60,6 +75,16 @@ namespace WinProcedure
             CarryTime = carryTime;
         }
 
+        public AttachFile(string no, string name, string theme, string publishUser, string publishTime, string carryTime,string abstract_)
+        {
+            No = no;
+            Name = name;
+            Theme = theme;
+            PublishUser = publishUser;
+            PublishTime = publishTime;
+            CarryTime = carryTime;
+            Abstract = abstract_;
+        }
         public AttachFile(string no, string name, string publishUser, string publishTime, string carryTime)
         {
             No = no;
