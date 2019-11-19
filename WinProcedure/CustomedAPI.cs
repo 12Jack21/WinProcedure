@@ -65,15 +65,16 @@ namespace WinProcedure
 
         public AttachFile() { }
         public static int Count;
-        public AttachFile(string no,string name,string theme,string publishUser,string publishTime,string carryTime)
-        {
-            No = no;
-            Name = name;
-            Theme = theme;
-            PublishUser = publishUser;
-            PublishTime = publishTime;
-            CarryTime = carryTime;
-        }
+
+        //public AttachFile(string no,string name,string theme,string publishUser,string publishTime,string carryTime)
+        //{
+        //    No = no;
+        //    Name = name;
+        //    Theme = theme;
+        //    PublishUser = publishUser;
+        //    PublishTime = publishTime;
+        //    CarryTime = carryTime;
+        //}
 
         public AttachFile(string no, string name, string theme, string publishUser, string publishTime, string carryTime,string abstract_)
         {
@@ -85,13 +86,14 @@ namespace WinProcedure
             CarryTime = carryTime;
             Abstract = abstract_;
         }
-        public AttachFile(string no, string name, string publishUser, string publishTime, string carryTime)
+        public AttachFile(string no, string name, string publishUser, string publishTime, string carryTime,string abstract_)
         {
             No = no;
             Name = name;
             PublishUser = publishUser;
             PublishTime = publishTime;
             CarryTime = carryTime;
+            Abstract = abstract_;
         }
     }
     public class Book
