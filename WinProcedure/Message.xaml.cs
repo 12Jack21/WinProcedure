@@ -34,7 +34,7 @@ namespace WinProcedure
             WindowSender msgSender = new WindowSender();
             Window window = Application.Current.MainWindow;
             // 得到 Window
-            msgSender.hWnd = new WindowInteropHelper(window).Handle;
+            //msgSender.hWnd = new WindowInteropHelper(window).Handle;
             msgSender.Show();
             // Console.WriteLine("当前进程 {0}", new WindowInteropHelper(this).Handle.ToInt32());
         }

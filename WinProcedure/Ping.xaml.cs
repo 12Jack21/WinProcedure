@@ -207,35 +207,53 @@ namespace WinProcedure
             outputText.Dispatcher.Invoke(new Action(() => outputText.Text += Name + " start\n"));
             Thread.Sleep(200);
         }
+
+        public void PrintEven() //打印偶数
+        {
+            lock (this)
+            {
+                for (int i = 0; i <= 10; i = i + 2)
+                {
+                    Console.WriteLine(Thread.CurrentThread.Name + "--" + i);
+                    String name = Thread.CurrentThread.Name;
+                    outputText.Dispatcher.Invoke(new Action(() => outputText.AppendText(name + "--" + i + '\n')));
+                }
+            }
+        }
+        public void PrintOdd() //打印奇数
+        {
+            lock (this) //保证此方法只能同时有一个线程在执行
+            {
+                for (int i = 1; i <= 10; i = i + 2)
+                {
+                    Console.WriteLine(Thread.CurrentThread.Name + "--" + i);
+                    String name = Thread.CurrentThread.Name;
+                    outputText.Dispatcher.Invoke(new Action(() => outputText.AppendText(name + "--" + i + '\n')));
+                }
+            }
+        }
         // 同步方法
         private void Sync_Click(object sender, RoutedEventArgs e)
         {
             outputText.Text += "****************Sync_Btn_Click start" + " ,Time: " + DateTime.Now + "******************\n";
-            Thread thread1 = new Thread(new ThreadStart(doSomeThingLong));
-            thread1.Name = "doSomeThingLong thread_1";
-            Thread thread2 = new Thread(new ThreadStart(doSomeThingLong));
-            thread2.Name = "doSomeThingLong thread_2";
-            Thread thread3 = new Thread(new ThreadStart(doSomeThingLong));
-            thread3.Name = "doSomeThingLong thread_3";
-            Thread thread4 = new Thread(new ThreadStart(doSomeThingLong));
-            thread4.Name = "doSomeThingLong thread_4";
+            Thread thread1 = new Thread(new ThreadStart(PrintOdd));
+            thread1.Name = "thread_1";
+            Thread thread2 = new Thread(new ThreadStart(PrintEven));
+            thread2.Name = "thread_2";
+            Thread thread3 = new Thread(new ThreadStart(PrintOdd));
+            thread3.Name = "thread_3";
+            Thread thread4 = new Thread(new ThreadStart(PrintEven));
+            thread4.Name = "thread_4";
 
-            outputText.Text += thread1.Name + " start, Time: " + DateTime.Now + "\n";
             thread1.Start();
-            thread1.Join();
-            outputText.Text += "doSomeThingLong thread_1 end" + " ,Time: " + DateTime.Now + "\n";
-            outputText.Text += thread2.Name + " start, Time: " + DateTime.Now + "\n";
             thread2.Start();
-            thread2.Join();
-            outputText.Text += "doSomeThingLong thread_2 end" + " ,Time: " + DateTime.Now + "\n";
-            outputText.Text += thread3.Name + " start, Time: " + DateTime.Now + "\n";
             thread3.Start();
-            thread3.Join();
-            outputText.Text += "doSomeThingLong thread_3 end" + " ,Time: " + DateTime.Now + "\n";
-            outputText.Text += thread4.Name + " start, Time: " + DateTime.Now + "\n";
             thread4.Start();
-            thread4.Join();
-            outputText.Text += "doSomeThingLong thread_4 end" + " ,Time: " + DateTime.Now + "\n";
+
+            //thread1.Join();
+            //thread2.Join();
+            //thread3.Join();
+            //thread4.Join(); // 保证全部执行完
 
             outputText.Text += "****************Sync_Btn_Click end" + " ,Time: " + DateTime.Now + "******************\n";
         }
@@ -346,7 +364,7 @@ namespace WinProcedure
                 {
                     while (true)
                     {
-                        //阻塞当前进程
+                        //阻塞当前线程
                         _event.WaitOne();
                         string name = Thread.CurrentThread.Name;
                         this.Dispatcher.Invoke(new Action(() => outputText.Text += "线程 " + name + "\n"));
@@ -357,6 +375,15 @@ namespace WinProcedure
                 t.Start();
             }
             //0.5秒后允许一个等待的线程继续，当前允许线程1
+            Thread.Sleep(500);
+            _event.Set();
+            //0.5秒后允许一个等待的线程继续，当前允许的是线程2
+            Thread.Sleep(500);
+            _event.Set();
+            //0.5秒后允许一个等待的线程继续，当前允许的是线程2
+            Thread.Sleep(500);
+            _event.Set();
+            //0.5秒后允许一个等待的线程继续，当前允许的是线程2
             Thread.Sleep(500);
             _event.Set();
             //0.5秒后允许一个等待的线程继续，当前允许的是线程2
@@ -377,14 +404,14 @@ namespace WinProcedure
                 {
                     while (true)
                     {
-                        //阻塞当前进程
+                        //阻塞当前线程
                         _event.WaitOne();
                         string name = Thread.CurrentThread.Name;
                         this.Dispatcher.Invoke(new Action(() => outputText.Text += "线程 " + name + "\n"));
 
                         //ManualResetEvent需要手动 Reset
                         _event.Reset();
-                        Thread.Sleep(500);
+                        //Thread.Sleep(500);
                     }
                 });
                 t.Name = "thread_" + i;
@@ -393,7 +420,7 @@ namespace WinProcedure
             //0.5秒后允许 所有 等待的线程继续，当前允许线程1
             Thread.Sleep(500);
             _event.Set();
-
+           
         }
 
 

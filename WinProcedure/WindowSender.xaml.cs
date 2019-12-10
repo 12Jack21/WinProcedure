@@ -25,18 +25,19 @@ namespace WinProcedure
         public WindowSender()
         {
             InitializeComponent();
+            FindWndHandlerByName("WinProcedure");
         }
 
 
         // 用户文本消息
         const int WM_COPYDATA = 0x004A;
-        public IntPtr hWnd;
+        public IntPtr hWnd; // 要发送消息的目标窗体句柄
 
         [DllImport("user32.dll")]
         public static extern void SendMessage(
             IntPtr hWnd,
             int msg,
-            IntPtr wParam,
+            IntPtr wParam, //应该是具体的控件句柄
             ref COPYDATASTRUCT lParam);
 
         // 通过进程名找到窗口句柄
@@ -63,7 +64,7 @@ namespace WinProcedure
                 cds.dwData = (IntPtr)100;
                 byte[] arr = Encoding.UTF8.GetBytes(text);
                 Console.WriteLine("向进程{1}发送{0}\n", text, hWnd.ToInt32());
-                cds.cbData = arr.Length + 1;
+                cds.cbData = arr.Length + 1; // 发送的字节数
                 // 同步发送消息
                 // 异步发送存在字符串指针空间回收问题
                 SendMessage(hWnd, WM_COPYDATA, IntPtr.Zero, ref cds);

@@ -13,9 +13,7 @@ namespace CustomedCOM
     {
         void Connect(string connectString);
         void Disconnect();
-
         string GetVersion();
-
         int Add(int a, int b);
         int Multiply(int a, int b);
     }

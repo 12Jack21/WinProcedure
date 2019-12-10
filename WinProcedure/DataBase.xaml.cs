@@ -455,8 +455,8 @@ namespace WinProcedure
                     //关闭DataReader 
                     reader.Close();
                 //关闭连接 
-                if (conn != null)
-                    conn.Close();
+                if (con != null)
+                    con.Close();
             }
         }
 
